@@ -1,0 +1,32 @@
+JUnit version 4.13.2
+.SMOKE players=3 seat=0 seed=703500 decisions=25 result=LOSE_GAME score=42.0
+SMOKE players=3 seat=1 seed=703501 decisions=24 result=LOSE_GAME score=36.0
+SMOKE players=3 seat=2 seed=703502 decisions=24 result=WIN_GAME score=54.0
+.SMOKE players=4 seat=0 seed=703600 decisions=21 result=WIN_GAME score=41.0
+SMOKE players=4 seat=1 seed=703601 decisions=22 result=WIN_GAME score=34.0
+SMOKE players=4 seat=2 seed=703602 decisions=22 result=WIN_GAME score=44.0
+SMOKE players=4 seat=3 seed=703603 decisions=21 result=WIN_GAME score=38.0
+...............TIMING baseline players=3 sample=0 elapsed_ms=425.751 fm_calls=79376
+TIMING baseline players=3 sample=1 elapsed_ms=383.022 fm_calls=101057
+TIMING baseline players=3 sample=2 elapsed_ms=339.594 fm_calls=56265
+TIMING baseline players=4 sample=0 elapsed_ms=351.922 fm_calls=76560
+TIMING baseline players=4 sample=1 elapsed_ms=323.513 fm_calls=67562
+TIMING baseline players=4 sample=2 elapsed_ms=298.080 fm_calls=55099
+.SMOKE heuristic players=3 seat=0 seed=703600 decisions=24 result=WIN_GAME score=45.0
+SMOKE heuristic players=3 seat=1 seed=703601 decisions=24 result=WIN_GAME score=53.0
+SMOKE heuristic players=3 seat=2 seed=703602 decisions=24 result=WIN_GAME score=57.0
+SMOKE heuristic players=4 seat=0 seed=703700 decisions=21 result=WIN_GAME score=47.0
+SMOKE heuristic players=4 seat=1 seed=703701 decisions=22 result=WIN_GAME score=49.0
+SMOKE heuristic players=4 seat=2 seed=703702 decisions=21 result=WIN_GAME score=49.0
+SMOKE heuristic players=4 seat=3 seed=703703 decisions=21 result=LOSE_GAME score=34.0
+.TIMING heuristic players=3 sample=0 elapsed_ms=391.928 fm_calls=97317
+TIMING heuristic players=3 sample=1 elapsed_ms=491.902 fm_calls=104546
+TIMING heuristic players=3 sample=2 elapsed_ms=315.705 fm_calls=52767
+TIMING heuristic players=4 sample=0 elapsed_ms=268.337 fm_calls=43307
+TIMING heuristic players=4 sample=1 elapsed_ms=276.744 fm_calls=44792
+TIMING heuristic players=4 sample=2 elapsed_ms=282.014 fm_calls=48422
+..............
+Time: 6.858
+
+OK (33 tests)
+

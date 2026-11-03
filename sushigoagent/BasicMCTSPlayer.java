@@ -6,50 +6,64 @@ import core.actions.AbstractAction;
 import core.interfaces.IStateHeuristic;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
-
-/**
- * This is a simple version of MCTS that may be useful for newcomers to TAG and MCTS-like algorithms
- * It strips out some of the additional configuration of MCTSPlayer. It uses BasicTreeNode in place of
- * SingleTreeNode.
- */
+/** Reliability modifications to TAG's permitted BasicMCTS player. */
 public class BasicMCTSPlayer extends AbstractPlayer {
+    public record SearchStats(long iterations, long fmCalls, long copyCalls, long elapsedNanos) {}
+    private SearchStats lastSearchStats = new SearchStats(0, 0, 0, 0);
 
     public BasicMCTSPlayer() {
-        this(System.currentTimeMillis());
+        this(new BasicMCTSParams());
     }
 
+    /** TAG's registered randomSeed parameter is a signed 32-bit integer. */
     public BasicMCTSPlayer(long seed) {
-        super(new BasicMCTSParams(), "Basic MCTS");
-        // for clarity we create a new set of parameters here, but we could just use the default parameters
-        parameters.setRandomSeed(seed);
-        rnd = new Random(seed);
+        this(parametersWithSeed(seed));
+    }
 
-        // These parameters can be changed, and will impact the Basic MCTS algorithm
-        BasicMCTSParams params = getParameters();
-        params.K = Math.sqrt(2);
-        params.rolloutLength = 10;
-        params.maxTreeDepth = 5;
-        params.epsilon = 1e-6;
-
+    private static BasicMCTSParams parametersWithSeed(long seed) {
+        if (seed < Integer.MIN_VALUE || seed > Integer.MAX_VALUE)
+            throw new IllegalArgumentException("randomSeed must fit a signed 32-bit integer");
+        BasicMCTSParams params = new BasicMCTSParams();
+        params.setParameterValue("randomSeed", (int) seed);
+        return params;
     }
 
     public BasicMCTSPlayer(BasicMCTSParams params) {
-        super(params, "Basic MCTS");
+        super(params, "Sushi BasicMCTS");
+        params.validate();
         rnd = new Random(params.getRandomSeed());
     }
 
     @Override
     public AbstractAction _getAction(AbstractGameState gameState, List<AbstractAction> actions) {
-        // Search for best action from the root
-        BasicTreeNode root = new BasicTreeNode(this, null, gameState, rnd);
+        long started = System.nanoTime();
+        getParameters().validate();
+        if (actions == null || actions.isEmpty())
+            throw new IllegalArgumentException("At least one legal action is required");
+        SearchBudget budget = new SearchBudget(getParameters(), started, System::nanoTime);
+        AbstractAction selected = actions.get(0);
+        // Preserve a legal fallback for forced moves, zero depth and exhausted budgets.
+        if (actions.size() > 1 && gameState.isNotTerminal()
+                && getParameters().maxTreeDepth > 0 && budget.canStartIteration()) {
+            Objects.requireNonNull(getForwardModel(), "Forward model must be assigned before search");
+            BasicTreeNode root = new BasicTreeNode(this, null, gameState, rnd, actions, budget);
+            root.mctsSearch();
+            selected = root.bestAction();
+        }
+        lastSearchStats = new SearchStats(budget.iterations, budget.fmCalls,
+                budget.copyCalls, System.nanoTime() - started);
+        return selected;
+    }
 
-        // mctsSearch does all of the hard work
-        root.mctsSearch();
-
-        // Return best action
-        return root.bestAction();
+    @Override
+    public void initializePlayer(AbstractGameState state) {
+        super.initializePlayer(state);
+        if (getParameters().resetSeedEachGame)
+            rnd.setSeed(getParameters().getRandomSeed());
+        lastSearchStats = new SearchStats(0, 0, 0, 0);
     }
 
     @Override
@@ -58,19 +72,17 @@ public class BasicMCTSPlayer extends AbstractPlayer {
     }
 
     public void setStateHeuristic(IStateHeuristic heuristic) {
-        getParameters().heuristic = heuristic;
+        getParameters().setParameterValue("heuristic", Objects.requireNonNull(heuristic));
     }
 
-
-    @Override
-    public String toString() {
-        return super.toString();
+    public SearchStats getLastSearchStats() {
+        return lastSearchStats;
     }
 
     @Override
     public BasicMCTSPlayer copy() {
-        BasicMCTSPlayer retValue = new BasicMCTSPlayer((BasicMCTSParams) parameters.copy());
-        retValue.setName(toString());
-        return retValue;
+        BasicMCTSPlayer copy = new BasicMCTSPlayer((BasicMCTSParams) parameters.copy());
+        copy.setName(toString());
+        return copy;
     }
 }

@@ -1,7 +1,11 @@
 # Implementation stages
 
-Status: Stage 1 complete; Stages 2–6 planned. Each stage has a defined scope,
-validation criteria and a separate Git checkpoint.
+Status: Stages 1–3 implemented and validated; Stages 4–6 planned. Stage 1 is
+committed at `a008e35`. Stage 2 and 3 records contain separate staging commands;
+their implementation does not create commits automatically.
+
+Validation records: [Stage 1](STAGE_1.md), [Stage 2](STAGE_2.md),
+[Stage 3](STAGE_3.md). Each stage has a defined scope and completion criteria.
 
 | Stage | Scope | Completion criteria | Commit message |
 |---|---|---|---|

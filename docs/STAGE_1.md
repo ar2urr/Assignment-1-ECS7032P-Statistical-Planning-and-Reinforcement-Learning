@@ -1,6 +1,10 @@
 # Stage 1 validation record
 
-Status: complete. Validation date: 3 November 2026.
+Status: complete. Validation date: 3 November 2026. Historical checkpoint:
+`a008e35` (`Add Stage 1 baseline implementation for Sushi Go agent`).
+
+This record describes that commit. Current source includes the later Stage 2
+adaptations and Stage 3 heuristic; the original baseline remains in Git history.
 
 ## Scope
 
@@ -35,7 +39,7 @@ Environment: macOS, OpenJDK 21, IntelliJ-bundled Maven 3.9.9 and JUnit 4.13.2.
 | Focused JUnit checks | `OK (3 tests)` |
 | Shell and JSON syntax | Passed |
 
-Latest output: [stage1-validation.txt](../results/stage1-validation.txt).
+Historical output: [stage1-validation.txt](../results/stage1-validation.txt).
 
 The seven games against Random players validate functionality. They do not
 establish general playing strength. The 450 ms configuration was loaded but not
@@ -62,5 +66,5 @@ No framework change is required.
   the forward-model call count.
 - Deadline checks occur between iterations and require timing validation.
 
-These limitations define the planned Stage 2 reliability work. The baseline
-contains no custom heuristic or multiplayer modification.
+These limitations defined the Stage 2 reliability work. At this checkpoint,
+the baseline contained no custom heuristic or multiplayer modification.

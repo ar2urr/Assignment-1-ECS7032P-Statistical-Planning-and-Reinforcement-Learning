@@ -50,8 +50,9 @@ assessed against course content and relevant literature.
 | Experiments section | 4 | 500 milliseconds |
 
 The conflict remains unresolved. The baseline is validated with both player counts.
-Its provisional time configuration uses a 450 ms budget and `breakMS=25`;
-deadline compliance has not been measured.
+Baseline and heuristic time configurations use a 450 ms budget and `breakMS=25`.
+Stages 2–3 include measured opening-position timing checks; these samples do not
+establish deadline compliance across complete games or on the marking machine.
 
 The rubric's meaning of "per pair" also requires clarification for multiplayer
 experiments. The planned protocol uses fixed opponent lineups, recorded player

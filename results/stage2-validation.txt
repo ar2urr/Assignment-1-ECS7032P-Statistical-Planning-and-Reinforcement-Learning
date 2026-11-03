@@ -1,0 +1,19 @@
+JUnit version 4.13.2
+.SMOKE players=3 seat=0 seed=703500 decisions=24 result=WIN_GAME score=42.0
+SMOKE players=3 seat=1 seed=703501 decisions=25 result=LOSE_GAME score=27.0
+SMOKE players=3 seat=2 seed=703502 decisions=25 result=WIN_GAME score=42.0
+.SMOKE players=4 seat=0 seed=703600 decisions=21 result=WIN_GAME score=46.0
+SMOKE players=4 seat=1 seed=703601 decisions=21 result=WIN_GAME score=41.0
+SMOKE players=4 seat=2 seed=703602 decisions=21 result=WIN_GAME score=36.0
+SMOKE players=4 seat=3 seed=703603 decisions=21 result=WIN_GAME score=38.0
+...............TIMING baseline players=3 sample=0 elapsed_ms=393.303 fm_calls=93610
+TIMING baseline players=3 sample=1 elapsed_ms=194.105 fm_calls=17193
+TIMING baseline players=3 sample=2 elapsed_ms=353.598 fm_calls=85690
+TIMING baseline players=4 sample=0 elapsed_ms=307.456 fm_calls=55792
+TIMING baseline players=4 sample=1 elapsed_ms=346.603 fm_calls=45947
+TIMING baseline players=4 sample=2 elapsed_ms=351.860 fm_calls=75262
+
+Time: 3.513
+
+OK (17 tests)
+

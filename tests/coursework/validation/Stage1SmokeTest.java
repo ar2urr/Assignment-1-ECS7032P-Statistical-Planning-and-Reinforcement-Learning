@@ -21,7 +21,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-/** Integration checks for the untouched official BasicMCTS baseline. */
+/** Integration checks introduced with the Stage 1 baseline. */
 public class Stage1SmokeTest {
     private String configPath(String name) {
         return Path.of(System.getProperty("coursework.project"), "sushigoagent", name).toString();
