@@ -1,0 +1,27 @@
+Note: Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+Note: Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+JUnit version 4.13.2
+.SMOKE players=3 seat=0 seed=703500 decisions=24 result=WIN_GAME score=53.0
+SMOKE players=3 seat=1 seed=703501 decisions=24 result=WIN_GAME score=42.0
+SMOKE players=3 seat=2 seed=703502 decisions=24 result=WIN_GAME score=49.0
+.SMOKE players=4 seat=0 seed=703600 decisions=21 result=LOSE_GAME score=32.0
+SMOKE players=4 seat=1 seed=703601 decisions=21 result=WIN_GAME score=39.0
+SMOKE players=4 seat=2 seed=703602 decisions=21 result=WIN_GAME score=36.0
+SMOKE players=4 seat=3 seed=703603 decisions=21 result=LOSE_GAME score=37.0
+.
+Time: 1.464
+
+OK (3 tests)
+
