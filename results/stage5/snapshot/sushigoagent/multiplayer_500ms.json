@@ -1,0 +1,12 @@
+{
+  "class": "sushigoagent.BasicMCTSParams",
+  "K": 1.4142135623730951,
+  "rolloutLength": 10,
+  "maxTreeDepth": 5,
+  "epsilon": 1e-06,
+  "budgetType": "BUDGET_TIME",
+  "budget": 450,
+  "randomSeed": 7032,
+  "breakMS": 25,
+  "opponentModel": "MAXN"
+}

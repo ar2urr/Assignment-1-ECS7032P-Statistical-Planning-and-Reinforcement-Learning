@@ -1,0 +1,68 @@
+{
+  "started_utc": "2026-11-03T18:50:17.562011+00:00",
+  "tag_revision": "033232baa88bac4b6a1fe14fae62939193cdf9f7",
+  "project_base_commit": "db219f57db8b16c49814d703d2eb84a65596b1be",
+  "protocol": {
+    "games_per_cell": 504,
+    "workers": 2,
+    "master_seed": 703205,
+    "main_variants": [
+      "baseline",
+      "heuristic",
+      "multiplayer",
+      "combined"
+    ],
+    "feature_ablations": [
+      "combined_no_sets",
+      "combined_no_wasabi",
+      "combined_no_maki",
+      "combined_no_pudding"
+    ],
+    "opponents": [
+      "random",
+      "osla",
+      "baseline"
+    ],
+    "players": [
+      3,
+      4
+    ],
+    "timing_games_per_cell": "one per seat",
+    "skip_timing": false,
+    "warmup_games_per_cell": 8,
+    "java_options": [
+      "-Xms128m",
+      "-Xmx512m"
+    ],
+    "seed_policy": "independent streams across cells; upstream hidden sampling is not fully seed-controlled",
+    "analysis": "unpaired estimates; seats balanced within each cell; no outcome-based stopping"
+  },
+  "source_sha256": {
+    "experiments/configs/combined_no_maki.json": "d87b3d37b41f574e5f3b6214b6622d9e72b745fc70c231f3f0273b328dcb7bc1",
+    "experiments/configs/combined_no_pudding.json": "de280e2d7dcfaedafe03e841474a2e8cce5e2ac7f0c2547b5bee6652dba4e663",
+    "experiments/configs/combined_no_sets.json": "46d155e056fabe7552c04f86f5c886549df013d4c2ce36f26792492428bf4c51",
+    "experiments/configs/combined_no_wasabi.json": "f251460190ebcc22d22a8b7812a2cdd5ef4d8bf5a700f5d93278ccc8a6d64feb",
+    "experiments/coursework/experiments/ExperimentRunner.java": "8503bb8e4ed55883d6e667314150a79d23fa2103f3148c3fb35b36f54613502a",
+    "sushigoagent/BasicMCTSParams.java": "b109f37b32de83a3d9536c7c51bffe8209dbd8d63b9bbdeeedcad70a55133620",
+    "sushigoagent/BasicMCTSPlayer.java": "7e2c4d271e6ac928e3dda34adb328e61ef4aae9745d40709e714748a1d7a412a",
+    "sushigoagent/BasicTreeNode.java": "7fabd14f5b6debb6d90492d8a72f302a5c60337e34ec20e0528b7ba6a4b1e63a",
+    "sushigoagent/SearchBudget.java": "4589eec982711b3f7d6758b28dd32d32ffd3c2275c3a8d6cf763ba0100f193de",
+    "sushigoagent/SushiGoHeuristic.java": "e969764900519d3b12536d637b4654ecc6fad20b7b713f77066ca22133bdc711",
+    "sushigoagent/baseline_500ms.json": "5db472dfc8e4cadb16b893d9bd47eb7bf8ddf2ed919ccabc625496ec60688f02",
+    "sushigoagent/baseline_iterations.json": "c010f149a6ef821156b01eced6e3794133307ad09ceec990343238d4c6677c44",
+    "sushigoagent/combined_500ms.json": "c428e7fc1604c787facc49dc12604ef0324f86e280cdfe4dd0713584f398de1e",
+    "sushigoagent/combined_iterations.json": "0883001d27ee06283828af1a103ea72dd4fa1331b456019357974ebca1968127",
+    "sushigoagent/heuristic_500ms.json": "5b77d7fd90cb4a9903e36435d39b4a056a6caf54944e872e4609a23ee5e5540e",
+    "sushigoagent/heuristic_iterations.json": "222e3f1c296fb75378e845cba971f073e18f1fdc40d264f19117acb966295dbf",
+    "sushigoagent/multiplayer_500ms.json": "818ac6140a494eebdea31ec3c5407fe289a3f12dc9a5e7f117c6ac3ac0ac7cd0",
+    "sushigoagent/multiplayer_iterations.json": "f1a12146166313d70176704604b2aefedba73737dce28f9fafdee25173cc4235"
+  },
+  "platform": "macOS-26.1-arm64-arm-64bit",
+  "hardware": "Apple M2\n8589934592",
+  "python": "3.9.6",
+  "java_version": "openjdk version \"21\" 2023-09-19\nOpenJDK Runtime Environment (build 21+35-2513)\nOpenJDK 64-Bit Server VM (build 21+35-2513, mixed mode, sharing)",
+  "framework_jar_sha256": "a73464d8a7664f7b4445fe9f98752fd7c041ef57e71edcc1a0d7c5ec5860cf81",
+  "snapshot_java_suffix": ".txt",
+  "finished_utc": "2026-11-03T19:47:34.490698+00:00",
+  "completed": true
+}

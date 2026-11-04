@@ -14,5 +14,6 @@
     "wasabiWeight": 1.0,
     "makiWeight": 1.0,
     "puddingWeight": 1.0
-  }
+  },
+  "opponentModel": "PARANOID"
 }

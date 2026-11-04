@@ -1,0 +1,12 @@
+{
+  "bootstrap_repetitions": 5000,
+  "bootstrap_seed": 703205,
+  "intervals": "pointwise 95% seat-stratified percentile bootstrap; no multiple-comparison adjustment",
+  "python": "3.12.14",
+  "numpy": "2.5.4",
+  "matplotlib": "3.11.2",
+  "analysis_script_sha256": "c6fd1daf39c9592df61b25a3d3f639e8c87c70450ea8a33aeb6c734072114384",
+  "validated_fixed_games": 16128,
+  "validated_timing_games": 28,
+  "validated_timing_decisions": 633
+}

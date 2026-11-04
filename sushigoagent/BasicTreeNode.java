@@ -10,15 +10,16 @@ import static utilities.Utils.noise;
 
 /**
  * Adapted from TAG players.basicMCTS.BasicTreeNode (see LICENSE-TAG.txt).
- * Retains closed-loop selection, random expansion/rollout, scalar backup and
- * most-visited action selection. Phase 2 adds resource checks and seeded sampling.
+ * Retains closed-loop selection, random expansion/rollout and most-visited action selection.
+ * Stage 2 adds resource checks and seeded sampling; Stage 4 adds selectable
+ * per-player value backup and self-interested opponent selection.
  */
 class BasicTreeNode {
     final BasicTreeNode root;
     final BasicTreeNode parent;
     final Map<AbstractAction, BasicTreeNode> children = new LinkedHashMap<>();
     final int depth;
-    private double totValue;
+    private final double[] totalValues;
     private long nVisits;
     private final BasicMCTSPlayer player;
     private final Random rnd;
@@ -33,6 +34,7 @@ class BasicTreeNode {
         this.root = parent == null ? this : parent.root;
         this.depth = parent == null ? 0 : parent.depth + 1;
         this.state = state;
+        this.totalValues = new double[state.getNPlayers()];
         this.rnd = rnd;
         this.budget = budget;
         if (state.isNotTerminal()) {
@@ -51,11 +53,17 @@ class BasicTreeNode {
             if (!budget.hasTime()) break;
             AbstractGameState endState = selected.rollOut();
             if (!budget.hasTime()) break;
-            double value = player.getParameters().getStateHeuristic()
-                    .evaluateState(endState, player.getPlayerID());
-            if (!Double.isFinite(value))
-                throw new IllegalStateException("State heuristic must return a finite value");
-            selected.backUp(value);
+            double[] values = new double[state.getNPlayers()];
+            boolean maxN = player.getParameters().opponentModel == BasicMCTSParams.OpponentModel.MAXN;
+            for (int p = 0; p < values.length; p++) {
+                if (!maxN && p != player.getPlayerID()) continue;
+                // Never back up an incomplete vector when the deadline expires.
+                if (!budget.hasTime()) return;
+                values[p] = player.getParameters().getStateHeuristic().evaluateState(endState, p);
+                if (!Double.isFinite(values[p]))
+                    throw new IllegalStateException("State heuristic must return a finite value for player " + p);
+            }
+            selected.backUp(values);
             budget.completeIteration(System.nanoTime() - started);
             // A fully terminal/depth-limited tree needs no further identical evaluations.
             if (budget.copyCalls + budget.fmCalls == operationsBefore
@@ -111,11 +119,15 @@ class BasicTreeNode {
         for (Map.Entry<AbstractAction, BasicTreeNode> entry : children.entrySet()) {
             BasicTreeNode child = entry.getValue();
             if (child == null) throw new IllegalStateException("UCB requires expanded children");
-            double childValue = child.totValue / (child.nVisits + params.epsilon);
+            boolean maxN = params.opponentModel == BasicMCTSParams.OpponentModel.MAXN;
+            int actor = state.getCurrentPlayer();
+            int perspective = maxN ? actor : player.getPlayerID();
+            double childValue = child.totalValues[perspective] / (child.nVisits + params.epsilon);
             double exploration = params.K * Math.sqrt(Math.log(nVisits + 1) / (child.nVisits + params.epsilon));
-            // Preserve the original opponent model until the separate multiplayer phase.
-            boolean rootPlayerMoving = state.getCurrentPlayer() == player.getPlayerID();
-            double uctValue = (rootPlayerMoving ? childValue : -childValue) + exploration;
+            // MaxN selects the mover's own value, including repeated turns (Chopsticks).
+            // PARANOID retains Stage 2's root-value minimisation at every opponent node.
+            double sign = maxN || actor == player.getPlayerID() ? 1.0 : -1.0;
+            double uctValue = sign * childValue + exploration;
             uctValue = noise(uctValue, params.epsilon, rnd.nextDouble());
             if (bestAction == null || uctValue > bestValue) {
                 bestAction = entry.getKey();
@@ -148,11 +160,11 @@ class BasicTreeNode {
         return rolloutDepth >= player.getParameters().rolloutLength || !state.isNotTerminal();
     }
 
-    private void backUp(double result) {
+    private void backUp(double[] values) {
         BasicTreeNode node = this;
         while (node != null) {
             node.nVisits++;
-            node.totValue += result;
+            for (int p = 0; p < values.length; p++) node.totalValues[p] += values[p];
             node = node.parent;
         }
     }

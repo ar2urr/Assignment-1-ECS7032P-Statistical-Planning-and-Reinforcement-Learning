@@ -1,0 +1,11 @@
+iterations_3p_baseline_vs_random 50/504 elapsed_s=7.3
+iterations_3p_baseline_vs_random 100/504 elapsed_s=12.7
+iterations_3p_baseline_vs_random 150/504 elapsed_s=18.5
+iterations_3p_baseline_vs_random 200/504 elapsed_s=24.0
+iterations_3p_baseline_vs_random 250/504 elapsed_s=29.4
+iterations_3p_baseline_vs_random 300/504 elapsed_s=34.9
+iterations_3p_baseline_vs_random 350/504 elapsed_s=40.3
+iterations_3p_baseline_vs_random 400/504 elapsed_s=45.7
+iterations_3p_baseline_vs_random 450/504 elapsed_s=51.1
+iterations_3p_baseline_vs_random 500/504 elapsed_s=56.6
+iterations_3p_baseline_vs_random 504/504 elapsed_s=57.1

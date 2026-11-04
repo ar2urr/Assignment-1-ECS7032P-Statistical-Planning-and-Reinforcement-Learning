@@ -1,0 +1,11 @@
+iterations_4p_multiplayer_vs_baseline 50/504 elapsed_s=31.0
+iterations_4p_multiplayer_vs_baseline 100/504 elapsed_s=55.4
+iterations_4p_multiplayer_vs_baseline 150/504 elapsed_s=79.9
+iterations_4p_multiplayer_vs_baseline 200/504 elapsed_s=104.3
+iterations_4p_multiplayer_vs_baseline 250/504 elapsed_s=128.6
+iterations_4p_multiplayer_vs_baseline 300/504 elapsed_s=153.0
+iterations_4p_multiplayer_vs_baseline 350/504 elapsed_s=177.4
+iterations_4p_multiplayer_vs_baseline 400/504 elapsed_s=201.7
+iterations_4p_multiplayer_vs_baseline 450/504 elapsed_s=227.6
+iterations_4p_multiplayer_vs_baseline 500/504 elapsed_s=250.2
+iterations_4p_multiplayer_vs_baseline 504/504 elapsed_s=251.8

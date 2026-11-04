@@ -1,0 +1,11 @@
+iterations_4p_baseline_vs_random 50/504 elapsed_s=7.1
+iterations_4p_baseline_vs_random 100/504 elapsed_s=12.5
+iterations_4p_baseline_vs_random 150/504 elapsed_s=18.2
+iterations_4p_baseline_vs_random 200/504 elapsed_s=25.8
+iterations_4p_baseline_vs_random 250/504 elapsed_s=31.2
+iterations_4p_baseline_vs_random 300/504 elapsed_s=37.2
+iterations_4p_baseline_vs_random 350/504 elapsed_s=43.1
+iterations_4p_baseline_vs_random 400/504 elapsed_s=49.3
+iterations_4p_baseline_vs_random 450/504 elapsed_s=55.1
+iterations_4p_baseline_vs_random 500/504 elapsed_s=61.0
+iterations_4p_baseline_vs_random 504/504 elapsed_s=61.5

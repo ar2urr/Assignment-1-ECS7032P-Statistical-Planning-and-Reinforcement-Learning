@@ -20,14 +20,17 @@ rubric for ECS7032P Assignment 1.
 
 The initial prose describes 500 games per experiment as a guideline with justified
 exceptions. The detailed rubric deems fewer than 500 games per agent pair
-insufficient. The principal study therefore plans at least 500 games per reported
-comparison, pending any teaching-team clarification. Development smoke tests are
-separate from this study.
+insufficient. The principal protocol uses 504 games per reported lineup
+comparison, with balanced seats at both player counts. Development smoke tests
+and pilots are separate from this study.
 
 The top experimentation band requires more than one framework reference agent,
-the base version of the developed agent and thorough ablations. Planned references
-are Random and OSLA, alongside the corrected baseline. Some experiments at the
-500 ms level are required by the assignment text.
+the base version of the developed agent and thorough ablations. Stage 5 includes
+Random and OSLA, alongside the corrected baseline, and tests both algorithmic
+factors plus four feature removals. Some experiments at the 500 ms level are
+required by the assignment text. The selected scope uses a smaller latency study
+at that limit; it does not establish 500 ms playing strength or replace any
+full-size timed comparison the teaching team may require.
 
 The report requires enough configuration detail for replication, uncertainty
 analysis and explanations of the observed results. Novelty and ambition are
@@ -49,14 +52,15 @@ assessed against course content and relevant literature.
 | Code / tournament description | 3 | 1 second |
 | Experiments section | 4 | 500 milliseconds |
 
-The conflict remains unresolved. The baseline is validated with both player counts.
-Baseline and heuristic time configurations use a 450 ms budget and `breakMS=25`.
-Stages 2–3 include measured opening-position timing checks; these samples do not
-establish deadline compliance across complete games or on the marking machine.
+The conflict remains unresolved. All four main variants are tested with both
+player counts. Time configurations use a 450 ms budget and `breakMS=25`.
+Stage 5 measures searched decisions across 28 complete games. These samples do
+not establish a hard deadline guarantee or compliance on the marking machine.
 
 The rubric's meaning of "per pair" also requires clarification for multiplayer
-experiments. The planned protocol uses fixed opponent lineups, recorded player
-counts and balanced seats, with at least 500 games per principal matchup.
+experiments. The implemented protocol uses fixed opponent lineups, recorded
+player counts and balanced seats, with 504 games per principal matchup.
+The [Stage 5 record](STAGE_5.md) defines the protocol and its limitations.
 
 ## Assessment weights
 

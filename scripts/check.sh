@@ -18,7 +18,7 @@ framework_path="$tag_dir/target/classes:$(cat "$project_dir/build/dependencies.t
 # A fresh class directory prevents deleted source files leaving loadable classes.
 classes_dir=$(mktemp -d "$project_dir/build/check.XXXXXX")
 trap 'rm -rf "$classes_dir"' EXIT
-sources=("$project_dir"/sushigoagent/*.java)
+sources=("$project_dir"/sushigoagent/*.java "$project_dir"/experiments/coursework/experiments/*.java)
 tests=()
 test_classes=()
 while IFS= read -r path; do
@@ -29,5 +29,5 @@ while IFS= read -r path; do
 done < <(find "$project_dir/tests" -name '*Test.java' -type f | sort)
 javac -proc:none -cp "$framework_path" -d "$classes_dir" "${sources[@]}" "${tests[@]}"
 cd "$tag_dir"
-java -Djava.awt.headless=true -Dcoursework.project="$project_dir" \
+java -Xms128m -Xmx512m -Djava.awt.headless=true -Dcoursework.project="$project_dir" \
     -cp "$classes_dir:$framework_path" org.junit.runner.JUnitCore "${test_classes[@]}"

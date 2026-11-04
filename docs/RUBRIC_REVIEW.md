@@ -6,19 +6,23 @@ Source: `Assignment 1 Rubric.pdf`, ECS7032P Assignment 1. Review date:
 ## Experimental design
 
 The rubric treats fewer than 500 games per agent pair as insufficient. The
-principal study is planned around at least 500 games per reported comparison,
-rather than 500 games pooled across the study. The seven baseline validation
-games are functionality tests only.
+principal protocol contains 504 games per reported lineup comparison:
+32 fixed-iteration cells and 16,128 measured games. The baseline validation
+games and experiment pilots are functionality tests only.
 
 The top band expects more than one framework agent plus the developed agent's
-base version. Planned comparators are Random, OSLA and the corrected baseline.
+base version. Stage 5 comparators are Random, OSLA and the corrected baseline.
 The ablation design contains four conditions: baseline, heuristic only,
 multiplayer modification only, and both modifications. Reliability fixes remain
 constant across those conditions to avoid confounding the algorithmic effects.
+Four further conditions remove individual heuristic features. A separate 28-game
+timing study measures decisions at the 500 ms target; it is not a large-sample
+playing-strength comparison at that budget. The [Stage 5 protocol](STAGE_5.md)
+and [results](../results/stage5/analysis/RESULTS.md) retain this distinction.
 
 ## Required evidence
 
-| Rubric area | Planned evidence | Stage |
+| Rubric area | Evidence or remaining deliverable | Stage |
 |---|---|---|
 | Abstract | Concise motivation, method, main experiments and actual findings. | 6 |
 | Problem definition | Research question and game-specific challenges, with precise contributions. | 3–4, finalised in 6 |
@@ -33,9 +37,9 @@ constant across those conditions to avoid confounding the algorithmic effects.
 ## Baseline and originality
 
 Stage 1 provides a traceable control. An unchanged framework agent would not
-satisfy the originality criterion as a final approach. The planned heuristic and
+satisfy the originality criterion as a final approach. The implemented heuristic and
 MaxN-style variant require justification against the lectures and prior work;
-their value must be established experimentally.
+their empirical effects are assessed by Stage 5 and do not alone establish novelty.
 
 ## Unresolved specification details
 

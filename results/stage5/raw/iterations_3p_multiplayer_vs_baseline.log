@@ -1,0 +1,11 @@
+iterations_3p_multiplayer_vs_baseline 50/504 elapsed_s=24.3
+iterations_3p_multiplayer_vs_baseline 100/504 elapsed_s=43.6
+iterations_3p_multiplayer_vs_baseline 150/504 elapsed_s=63.5
+iterations_3p_multiplayer_vs_baseline 200/504 elapsed_s=82.6
+iterations_3p_multiplayer_vs_baseline 250/504 elapsed_s=100.7
+iterations_3p_multiplayer_vs_baseline 300/504 elapsed_s=118.0
+iterations_3p_multiplayer_vs_baseline 350/504 elapsed_s=133.9
+iterations_3p_multiplayer_vs_baseline 400/504 elapsed_s=149.7
+iterations_3p_multiplayer_vs_baseline 450/504 elapsed_s=165.4
+iterations_3p_multiplayer_vs_baseline 500/504 elapsed_s=181.0
+iterations_3p_multiplayer_vs_baseline 504/504 elapsed_s=182.2

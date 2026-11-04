@@ -6,5 +6,6 @@
   "epsilon": 1e-06,
   "budgetType": "BUDGET_ITERATIONS",
   "budget": 150,
-  "randomSeed": 7032
+  "randomSeed": 7032,
+  "opponentModel": "PARANOID"
 }

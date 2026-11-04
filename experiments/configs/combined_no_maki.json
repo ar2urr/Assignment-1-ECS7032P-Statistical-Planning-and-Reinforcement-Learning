@@ -1,0 +1,18 @@
+{
+  "class": "sushigoagent.BasicMCTSParams",
+  "K": 1.4142135623730951,
+  "rolloutLength": 10,
+  "maxTreeDepth": 5,
+  "epsilon": 1e-06,
+  "budgetType": "BUDGET_ITERATIONS",
+  "budget": 150,
+  "randomSeed": 7032,
+  "heuristic": {
+    "class": "sushigoagent.SushiGoHeuristic",
+    "setWeight": 1.0,
+    "wasabiWeight": 1.0,
+    "makiWeight": 0.0,
+    "puddingWeight": 1.0
+  },
+  "opponentModel": "MAXN"
+}

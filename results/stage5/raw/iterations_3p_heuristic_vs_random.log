@@ -1,0 +1,11 @@
+iterations_3p_heuristic_vs_random 50/504 elapsed_s=7.4
+iterations_3p_heuristic_vs_random 100/504 elapsed_s=13.0
+iterations_3p_heuristic_vs_random 150/504 elapsed_s=19.0
+iterations_3p_heuristic_vs_random 200/504 elapsed_s=24.7
+iterations_3p_heuristic_vs_random 250/504 elapsed_s=30.3
+iterations_3p_heuristic_vs_random 300/504 elapsed_s=35.9
+iterations_3p_heuristic_vs_random 350/504 elapsed_s=41.4
+iterations_3p_heuristic_vs_random 400/504 elapsed_s=47.0
+iterations_3p_heuristic_vs_random 450/504 elapsed_s=52.6
+iterations_3p_heuristic_vs_random 500/504 elapsed_s=58.4
+iterations_3p_heuristic_vs_random 504/504 elapsed_s=58.9

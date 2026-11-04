@@ -9,6 +9,8 @@ import java.util.Objects;
 
 /** Parameters adapted from TAG's permitted players.basicMCTS implementation. */
 public class BasicMCTSParams extends PlayerParameters {
+    public enum OpponentModel { PARANOID, MAXN }
+    public OpponentModel opponentModel = OpponentModel.PARANOID;
     public double K = Math.sqrt(2);
     public int rolloutLength = 10;
     public int maxTreeDepth = 5;
@@ -16,6 +18,7 @@ public class BasicMCTSParams extends PlayerParameters {
     public IStateHeuristic heuristic = AbstractGameState::getHeuristicScore;
 
     public BasicMCTSParams() {
+        addTunableParameter("opponentModel", OpponentModel.PARANOID, Arrays.asList(OpponentModel.values()));
         addTunableParameter("K", Math.sqrt(2), Arrays.asList(0.0, 0.1, 1.0, Math.sqrt(2), 3.0, 10.0));
         addTunableParameter("rolloutLength", 10, Arrays.asList(0, 3, 10, 30, 100));
         addTunableParameter("maxTreeDepth", 5, Arrays.asList(0, 1, 3, 5, 10, 30, 100));
@@ -29,6 +32,7 @@ public class BasicMCTSParams extends PlayerParameters {
     @Override
     public void _reset() {
         super._reset();
+        opponentModel = (OpponentModel) getParameterValue("opponentModel");
         K = (double) getParameterValue("K");
         rolloutLength = (int) getParameterValue("rolloutLength");
         maxTreeDepth = (int) getParameterValue("maxTreeDepth");
@@ -42,6 +46,7 @@ public class BasicMCTSParams extends PlayerParameters {
         if (budget < 0 || breakMS < 0 || maxTreeDepth < 0 || rolloutLength < 0)
             throw new IllegalArgumentException("Budgets and search depths must be nonnegative");
         Objects.requireNonNull(budgetType, "budgetType");
+        Objects.requireNonNull(opponentModel, "opponentModel");
         Objects.requireNonNull(heuristic, "heuristic");
     }
 

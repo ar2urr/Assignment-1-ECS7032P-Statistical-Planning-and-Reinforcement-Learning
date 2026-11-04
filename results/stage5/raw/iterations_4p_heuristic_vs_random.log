@@ -1,0 +1,11 @@
+iterations_4p_heuristic_vs_random 50/504 elapsed_s=9.1
+iterations_4p_heuristic_vs_random 100/504 elapsed_s=15.0
+iterations_4p_heuristic_vs_random 150/504 elapsed_s=21.1
+iterations_4p_heuristic_vs_random 200/504 elapsed_s=27.3
+iterations_4p_heuristic_vs_random 250/504 elapsed_s=33.6
+iterations_4p_heuristic_vs_random 300/504 elapsed_s=39.5
+iterations_4p_heuristic_vs_random 350/504 elapsed_s=45.6
+iterations_4p_heuristic_vs_random 400/504 elapsed_s=55.1
+iterations_4p_heuristic_vs_random 450/504 elapsed_s=60.5
+iterations_4p_heuristic_vs_random 500/504 elapsed_s=66.0
+iterations_4p_heuristic_vs_random 504/504 elapsed_s=66.4

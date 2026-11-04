@@ -1,19 +1,22 @@
 # Implementation stages
 
-Status: Stages 1–3 implemented and validated; Stages 4–6 planned. Stage 1 is
-committed at `a008e35`. Stage 2 and 3 records contain separate staging commands;
-their implementation does not create commits automatically.
+Status: Stages 1–5 implemented and validated; Stage 6 is planned. Stage 1 is committed at `a008e35`; Stages 2 and 3 share
+checkpoint `db219f5`. Stages 4 and 5 are prepared for one combined checkpoint
+with message
+`stages 4 and 5: add multiplayer search and controlled experiments`.
 
 Validation records: [Stage 1](STAGE_1.md), [Stage 2](STAGE_2.md),
-[Stage 3](STAGE_3.md). Each stage has a defined scope and completion criteria.
+[Stage 3](STAGE_3.md), [Stage 4](STAGE_4.md), [Stage 5](STAGE_5.md).
+The historical Stage 2/3 staging examples are superseded by the actual combined
+checkpoint. No build, test or experiment script creates Git commits.
 
 | Stage | Scope | Completion criteria | Commit message |
 |---|---|---|---|
 | 1. Baseline | Pinned official TAG, permitted BasicMCTS package, JSON configurations, README and smoke checks. | Compilation, JSON loading, provenance check and complete 3/4-player games. | `stage 1: establish official BasicMCTS baseline and validation` |
 | 2. Reliability | Root legal-action handling, exhausted-budget fallback, RNG seeding, parameter copies, wall-clock deadlines and accurate budget accounting. | Regression checks, valid actions, preserved observations, correct copying and measured timing. | `stage 2: fix search correctness and decision budgets` |
 | 3. Sushi Go evaluation | Research question and hypothesis; configurable heuristic for incomplete sets, delayed Maki/Pudding rewards and useful Wasabi. | Scoring cases, terminal handling, finite values, no double counting and a rationale grounded in game rules and literature. | `stage 3: add configurable Sushi Go state evaluation` |
-| 4. Multiplayer search | MaxN-style selection and backup for self-interested opponents, retaining the original opponent model as an ablation. | Both models complete 3/4-player games; opponent-node value selection is checked; hypotheses and imperfect-information limits are documented. | `stage 4: add switchable multiplayer value selection` |
-| 5. Experiments | Baseline, heuristic-only, multiplayer-only and combined variants; comparisons against Random, OSLA and the corrected baseline. | At least 500 games per principal comparison, balanced seats, saved configurations/raw data, uncertainty analysis and experiments at the 500 ms level. | `stage 5: add ablation experiments and statistical analysis` |
+| 4. Multiplayer search | MaxN-style selection and backup for self-interested opponents, retaining the original opponent model as an ablation. | Both models complete 3/4-player games; opponent-node value selection is checked; hypotheses and imperfect-information limits are documented. | Combined Stage 4/5 checkpoint |
+| 5. Experiments | Baseline, heuristic-only, multiplayer-only and combined variants; comparisons against Random, OSLA and the corrected baseline. | At least 500 games per principal comparison, balanced seats, saved configurations/raw data, uncertainty analysis and a separate 500 ms latency study. | Combined Stage 4/5 checkpoint |
 | 6. Submission | Frozen configuration, fresh course-TAG validation, package ZIP, README and report in the official template. | Standalone execution, format/page limits, evidence-supported claims, clear figures/references and required individual components. | `stage 6: prepare validated submission package and report materials` |
 
 ## Dependencies
@@ -33,8 +36,10 @@ Short development or timing pilots remain separate from the principal study.
 
 For multiplayer experiments, a matchup has a fixed opponent lineup, player count
 and seat-balancing policy. A pooled set of 500 games does not establish 500
-independently played games against each distinct opponent. The rubric's meaning
-of "per pair" requires confirmation before finalising long runs.
+independently played games against each distinct opponent. The implemented study
+uses 504 games per lineup, with both player counts and
+balanced seats. The rubric's meaning of "per pair" still requires confirmation
+before final submission.
 
 ## Outstanding dependencies
 

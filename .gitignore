@@ -7,3 +7,7 @@ target/
 *.class
 *.jar
 .env
+
+__pycache__/
+*.py[cod]
+.venv/

@@ -1,0 +1,11 @@
+iterations_4p_combined_vs_osla 50/504 elapsed_s=8.2
+iterations_4p_combined_vs_osla 100/504 elapsed_s=14.3
+iterations_4p_combined_vs_osla 150/504 elapsed_s=20.5
+iterations_4p_combined_vs_osla 200/504 elapsed_s=26.6
+iterations_4p_combined_vs_osla 250/504 elapsed_s=32.6
+iterations_4p_combined_vs_osla 300/504 elapsed_s=38.9
+iterations_4p_combined_vs_osla 350/504 elapsed_s=45.2
+iterations_4p_combined_vs_osla 400/504 elapsed_s=51.2
+iterations_4p_combined_vs_osla 450/504 elapsed_s=57.4
+iterations_4p_combined_vs_osla 500/504 elapsed_s=63.4
+iterations_4p_combined_vs_osla 504/504 elapsed_s=63.9

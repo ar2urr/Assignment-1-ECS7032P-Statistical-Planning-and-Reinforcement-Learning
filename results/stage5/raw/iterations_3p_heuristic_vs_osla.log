@@ -1,0 +1,11 @@
+iterations_3p_heuristic_vs_osla 50/504 elapsed_s=7.8
+iterations_3p_heuristic_vs_osla 100/504 elapsed_s=13.7
+iterations_3p_heuristic_vs_osla 150/504 elapsed_s=19.4
+iterations_3p_heuristic_vs_osla 200/504 elapsed_s=25.2
+iterations_3p_heuristic_vs_osla 250/504 elapsed_s=31.4
+iterations_3p_heuristic_vs_osla 300/504 elapsed_s=37.6
+iterations_3p_heuristic_vs_osla 350/504 elapsed_s=43.8
+iterations_3p_heuristic_vs_osla 400/504 elapsed_s=50.3
+iterations_3p_heuristic_vs_osla 450/504 elapsed_s=57.2
+iterations_3p_heuristic_vs_osla 500/504 elapsed_s=65.0
+iterations_3p_heuristic_vs_osla 504/504 elapsed_s=65.5

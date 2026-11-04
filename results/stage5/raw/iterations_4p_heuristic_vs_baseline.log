@@ -1,0 +1,11 @@
+iterations_4p_heuristic_vs_baseline 50/504 elapsed_s=27.7
+iterations_4p_heuristic_vs_baseline 100/504 elapsed_s=51.5
+iterations_4p_heuristic_vs_baseline 150/504 elapsed_s=75.5
+iterations_4p_heuristic_vs_baseline 200/504 elapsed_s=99.8
+iterations_4p_heuristic_vs_baseline 250/504 elapsed_s=124.1
+iterations_4p_heuristic_vs_baseline 300/504 elapsed_s=148.2
+iterations_4p_heuristic_vs_baseline 350/504 elapsed_s=171.8
+iterations_4p_heuristic_vs_baseline 400/504 elapsed_s=195.6
+iterations_4p_heuristic_vs_baseline 450/504 elapsed_s=222.0
+iterations_4p_heuristic_vs_baseline 500/504 elapsed_s=247.3
+iterations_4p_heuristic_vs_baseline 504/504 elapsed_s=249.2
