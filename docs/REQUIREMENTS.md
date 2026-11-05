@@ -10,7 +10,8 @@ rubric for ECS7032P Assignment 1.
   submission's development basis.
 - The assignment discourages an entirely new MCTS implementation from scratch.
 - Custom runtime code must be inside `group{GROUP_LETTER}`. The development
-  package `sushigoagent` requires renaming to the assigned submission identifier.
+  package `sushigoagent` is exported as the assigned identifier `groupAG` by
+  the Stage 6 packaging tool.
 - Required package contents include source comments explaining critical logic,
   a constructor/run README and a competition JSON configuration.
 - Framework modifications outside the package cannot be assumed available during
@@ -42,7 +43,8 @@ assessed against course content and relevant literature.
 - Report format: official Word/LaTeX template, two columns, maximum four pages.
   References and generative-AI notes may extend to a fifth page under the guidance.
 - Individual submission: reflection of at most 300 words, in PDF format.
-- QMplus group membership is required before submission.
+- QMplus group membership is required before submission. The declared group is
+  AG, with one member.
 - Generative systems are permitted by the assignment excerpt.
 
 ## Competition settings

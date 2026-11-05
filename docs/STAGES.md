@@ -1,12 +1,13 @@
 # Implementation stages
 
-Status: Stages 1–5 implemented and validated; Stage 6 is planned. Stage 1 is committed at `a008e35`; Stages 2 and 3 share
-checkpoint `db219f5`. Stages 4 and 5 are prepared for one combined checkpoint
-with message
-`stages 4 and 5: add multiplayer search and controlled experiments`.
+Status: Stages 1–5 are implemented and validated. Stage 6 submission preparation
+is implemented; administrative details and official course-version/template
+confirmation remain outstanding. Stage 1 is committed at `a008e35`, Stages 2/3
+share `db219f5`, and Stages 4/5 share `26b8981`. Stage 6 changes are uncommitted.
 
 Validation records: [Stage 1](STAGE_1.md), [Stage 2](STAGE_2.md),
-[Stage 3](STAGE_3.md), [Stage 4](STAGE_4.md), [Stage 5](STAGE_5.md).
+[Stage 3](STAGE_3.md), [Stage 4](STAGE_4.md), [Stage 5](STAGE_5.md),
+[Stage 6](STAGE_6.md).
 The historical Stage 2/3 staging examples are superseded by the actual combined
 checkpoint. No build, test or experiment script creates Git commits.
 
@@ -45,6 +46,5 @@ before final submission.
 
 - Exact course TAG revision.
 - Competition player count and decision limit.
-- Assigned submission package identifier.
 - Official report template and complete generative-AI guidance.
-- Individual contribution records and reflections for final submission.
+- The sole member's contribution record and individual reflection for final submission.

@@ -1,0 +1,11 @@
+iterations_3p_heuristic_vs_baseline 50/504 elapsed_s=19.9
+iterations_3p_heuristic_vs_baseline 100/504 elapsed_s=36.3
+iterations_3p_heuristic_vs_baseline 150/504 elapsed_s=52.9
+iterations_3p_heuristic_vs_baseline 200/504 elapsed_s=69.0
+iterations_3p_heuristic_vs_baseline 250/504 elapsed_s=85.7
+iterations_3p_heuristic_vs_baseline 300/504 elapsed_s=100.9
+iterations_3p_heuristic_vs_baseline 350/504 elapsed_s=116.1
+iterations_3p_heuristic_vs_baseline 400/504 elapsed_s=131.4
+iterations_3p_heuristic_vs_baseline 450/504 elapsed_s=146.7
+iterations_3p_heuristic_vs_baseline 500/504 elapsed_s=162.1
+iterations_3p_heuristic_vs_baseline 504/504 elapsed_s=163.3

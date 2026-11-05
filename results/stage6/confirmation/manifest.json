@@ -1,0 +1,45 @@
+{
+  "started_utc": "2026-11-04T18:22:25.068369+00:00",
+  "tag_revision": "033232baa88bac4b6a1fe14fae62939193cdf9f7",
+  "protocol": {
+    "variants": [
+      "baseline",
+      "heuristic"
+    ],
+    "opponent": "baseline",
+    "players": [
+      3,
+      4
+    ],
+    "games_per_cell": 504,
+    "master_seed": 703206,
+    "iterations": 150,
+    "workers": 2,
+    "warmup_games_per_cell": 8,
+    "selection": "Heuristic/PARANOID with all weights 1 selected from Stage 5 before these games; no re-selection or tuning",
+    "purpose": "Independent replication of heuristic effect at 150 iterations; not a timed-strength study",
+    "analysis": "Unpaired, seat-stratified bootstrap; 5000 samples; pointwise 95 percent intervals",
+    "seed_limit": "New recorded game seeds, but upstream hidden-state sampling is not fully seed-controlled"
+  },
+  "source_sha256": {
+    "sushigoagent/BasicMCTSPlayer.java": "7e2c4d271e6ac928e3dda34adb328e61ef4aae9745d40709e714748a1d7a412a",
+    "sushigoagent/BasicMCTSParams.java": "b109f37b32de83a3d9536c7c51bffe8209dbd8d63b9bbdeeedcad70a55133620",
+    "sushigoagent/BasicTreeNode.java": "7fabd14f5b6debb6d90492d8a72f302a5c60337e34ec20e0528b7ba6a4b1e63a",
+    "sushigoagent/SearchBudget.java": "4589eec982711b3f7d6758b28dd32d32ffd3c2275c3a8d6cf763ba0100f193de",
+    "sushigoagent/SubmissionPlayer.java": "2ae1dd2b7f4d310a468bcfaa07a5d02ea8e1c0a086bea80f2a85a18c9240b786",
+    "sushigoagent/SushiGoHeuristic.java": "e969764900519d3b12536d637b4654ecc6fad20b7b713f77066ca22133bdc711",
+    "sushigoagent/baseline_iterations.json": "c010f149a6ef821156b01eced6e3794133307ad09ceec990343238d4c6677c44",
+    "sushigoagent/heuristic_iterations.json": "222e3f1c296fb75378e845cba971f073e18f1fdc40d264f19117acb966295dbf",
+    "experiments/coursework/experiments/ExperimentRunner.java": "8503bb8e4ed55883d6e667314150a79d23fa2103f3148c3fb35b36f54613502a",
+    "scripts/run-confirmation.py": "b0aaba224f0d0354d21ee79572a87eff14eb73480cc36b33137e1966f2c677c4",
+    "scripts/analyse-study.py": "c6fd1daf39c9592df61b25a3d3f639e8c87c70450ea8a33aeb6c734072114384"
+  },
+  "python": "3.12.14",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.1-arm64-arm-64bit",
+  "framework_jar_sha256": "a73464d8a7664f7b4445fe9f98752fd7c041ef57e71edcc1a0d7c5ec5860cf81",
+  "completed": true,
+  "finished_utc": "2026-11-04T18:29:06.535414+00:00",
+  "measured_games": 2016,
+  "no_game_seed_overlap_with_stage5": true
+}

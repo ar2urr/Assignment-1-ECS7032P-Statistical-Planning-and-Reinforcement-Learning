@@ -1,0 +1,46 @@
+JUnit version 4.13.2
+....SMOKE players=3 seat=0 seed=703500 decisions=25 result=WIN_GAME score=50.0
+SMOKE players=3 seat=1 seed=703501 decisions=24 result=WIN_GAME score=50.0
+SMOKE players=3 seat=2 seed=703502 decisions=24 result=WIN_GAME score=41.0
+.SMOKE players=4 seat=0 seed=703600 decisions=21 result=WIN_GAME score=40.0
+SMOKE players=4 seat=1 seed=703601 decisions=22 result=WIN_GAME score=39.0
+SMOKE players=4 seat=2 seed=703602 decisions=22 result=LOSE_GAME score=28.0
+SMOKE players=4 seat=3 seed=703603 decisions=21 result=WIN_GAME score=41.0
+.....SMOKE multiplayer players=3 seat=0 score=41.0
+SMOKE multiplayer players=3 seat=1 score=44.0
+SMOKE multiplayer players=3 seat=2 score=43.0
+SMOKE multiplayer players=4 seat=0 score=41.0
+SMOKE multiplayer players=4 seat=1 score=36.0
+SMOKE multiplayer players=4 seat=2 score=39.0
+SMOKE multiplayer players=4 seat=3 score=38.0
+SMOKE combined players=3 seat=0 score=47.0
+SMOKE combined players=3 seat=1 score=48.0
+SMOKE combined players=3 seat=2 score=69.0
+SMOKE combined players=4 seat=0 score=49.0
+SMOKE combined players=4 seat=1 score=48.0
+SMOKE combined players=4 seat=2 score=45.0
+SMOKE combined players=4 seat=3 score=50.0
+.................TIMING baseline players=3 sample=0 elapsed_ms=393.982 fm_calls=80267
+TIMING baseline players=3 sample=1 elapsed_ms=393.910 fm_calls=93852
+TIMING baseline players=3 sample=2 elapsed_ms=447.188 fm_calls=77408
+TIMING baseline players=4 sample=0 elapsed_ms=375.330 fm_calls=80641
+TIMING baseline players=4 sample=1 elapsed_ms=424.686 fm_calls=64966
+TIMING baseline players=4 sample=2 elapsed_ms=396.544 fm_calls=82390
+.SMOKE heuristic players=3 seat=0 seed=703600 decisions=24 result=WIN_GAME score=50.0
+SMOKE heuristic players=3 seat=1 seed=703601 decisions=24 result=WIN_GAME score=51.0
+SMOKE heuristic players=3 seat=2 seed=703602 decisions=24 result=WIN_GAME score=55.0
+SMOKE heuristic players=4 seat=0 seed=703700 decisions=21 result=WIN_GAME score=48.0
+SMOKE heuristic players=4 seat=1 seed=703701 decisions=21 result=WIN_GAME score=54.0
+SMOKE heuristic players=4 seat=2 seed=703702 decisions=21 result=WIN_GAME score=41.0
+SMOKE heuristic players=4 seat=3 seed=703703 decisions=21 result=WIN_GAME score=45.0
+.TIMING heuristic players=3 sample=0 elapsed_ms=399.669 fm_calls=89760
+TIMING heuristic players=3 sample=1 elapsed_ms=388.865 fm_calls=91212
+TIMING heuristic players=3 sample=2 elapsed_ms=392.325 fm_calls=81048
+TIMING heuristic players=4 sample=0 elapsed_ms=388.494 fm_calls=81774
+TIMING heuristic players=4 sample=1 elapsed_ms=366.667 fm_calls=57662
+TIMING heuristic players=4 sample=2 elapsed_ms=392.354 fm_calls=83765
+..................
+Time: 8.635
+
+OK (47 tests)
+

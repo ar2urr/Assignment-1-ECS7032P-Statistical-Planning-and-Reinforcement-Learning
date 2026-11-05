@@ -13,9 +13,27 @@ Stage 4 adds per-player value statistics and configurable opponent selection.
 
 The entire `sushigoagent` directory belongs under `src/main/java/` in a TAG
 checkout, producing `src/main/java/sushigoagent/`. Standard TAG compilation then
-includes the five Java classes. No changes to `core`, `games` or `players` are
+includes the six Java classes. No changes to `core`, `games` or `players` are
 required. The standalone project's validation script avoids copying files into
 the framework by compiling against TAG's existing classes.
+
+## Competition entry point
+
+`competition.json` loads `SubmissionPlayer`, whose no-argument constructor uses
+the Sushi Go heuristic, PARANOID selection and all four weights at 1.0. The
+optional constructor `SubmissionPlayer(long seed)` selects an explicit signed
+32-bit seed. `copy()` retains the concrete entry-point type and independent
+parameters. The budget is 400 ms with a 25 ms reserve, a nominal 375 ms cutoff.
+This adds headroom but cannot guarantee deadlines against framework/JVM/OS pauses.
+The research constructors and configurations below remain unchanged.
+
+```java
+core.AbstractPlayer agent = players.PlayerFactory.createPlayer(
+    "src/main/java/sushigoagent/competition.json");
+```
+
+The package-only export has its own standalone README. Packaging and validation
+commands are documented in `docs/STAGE_6.md` in the development repository.
 
 ## Construction
 
@@ -55,7 +73,7 @@ on initialisation.
 
 ## Configurations
 
-All configurations use seed 7032, K = sqrt(2), rollout length 10 and tree depth 5.
+The eight research configurations use seed 7032, K = sqrt(2), rollout length 10 and tree depth 5.
 
 | File | Evaluation | Opponent model | Budget |
 |---|---|---|---|

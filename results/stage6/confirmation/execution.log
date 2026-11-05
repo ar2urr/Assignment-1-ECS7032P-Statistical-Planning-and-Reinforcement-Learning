@@ -1,0 +1,9 @@
+START iterations_3p_baseline_vs_baseline
+START iterations_3p_heuristic_vs_baseline
+DONE iterations_3p_heuristic_vs_baseline
+START iterations_4p_baseline_vs_baseline
+DONE iterations_3p_baseline_vs_baseline
+START iterations_4p_heuristic_vs_baseline
+DONE iterations_4p_baseline_vs_baseline
+DONE iterations_4p_heuristic_vs_baseline
+COMPLETE /Users/arturistratov/Documents/Codex/2026-11-03/hel/work/stage6/project/results/stage6/confirmation

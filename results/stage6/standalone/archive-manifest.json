@@ -1,0 +1,17 @@
+{
+  "package": "groupAG",
+  "draft": false,
+  "zip_sha256": "66b4c76d51ee99737a1d5b4d6f44bed7b45ab262a7db2a137687176897adf47b",
+  "files": {
+    "groupAG/BasicMCTSParams.java": "f0ea4b8a9644fc4b52ca136346c322c04b5b717daefad3817631b1a608ae889d",
+    "groupAG/BasicMCTSPlayer.java": "7c0eeaf8da3b9c26064c3f410bf0f1abdb264390227d9297f90260702180926f",
+    "groupAG/BasicTreeNode.java": "cf58763ea1161e456a4c758783cfbc8e173325fc8ed9dd426270f13bfb44650b",
+    "groupAG/LICENSE-TAG.txt": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+    "groupAG/README.md": "c7cfd2dc8b71dbab542b7e23da550407635eb4e7106dcde3c238d3f389679649",
+    "groupAG/SearchBudget.java": "4e83259c388963909dce763af1636bf8bf0806e4ab806af30b134355154bfdd6",
+    "groupAG/SubmissionPlayer.java": "187c945dd64ee1275135b96989e5933114220a54b3ca6c146d2148f9b5a0292f",
+    "groupAG/SushiGoHeuristic.java": "6840133dc6716a34fdea2e93c8091fcca117648f992a78398720dfa663e2397f",
+    "groupAG/TAG_COMMIT": "ce3977cd7a7a122e12f6d07733a5b69da64ac8d7a8964627c9ef507858010d66",
+    "groupAG/competition.json": "dc40a1167f25e59010ea078d19e8f8be5c392030f7c2a0a6be726dd897f5964d"
+  }
+}

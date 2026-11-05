@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "games": 21,
+  "searched_decisions": 469,
+  "median_ms": 349.292958,
+  "p95_ms": 372.923275,
+  "max_ms": 388.60125,
+  "over_500ms": 0,
+  "scope": "21 functionality/timing games versus Random, one per seat per construction mode; no strength inference or hard deadline guarantee",
+  "measurement": "delegate getAction call; forced singleton moves and external observation/action-list generation excluded; cold first search retained; no warmup games",
+  "archive_sha256": "66b4c76d51ee99737a1d5b4d6f44bed7b45ab262a7db2a137687176897adf47b",
+  "package": "groupAG",
+  "development_package": false,
+  "tag_revision": "033232baa88bac4b6a1fe14fae62939193cdf9f7",
+  "framework_source_files_unchanged": 3029,
+  "probe_sha256": "a444fb3edda692cea551be1d6511172b8491d216eeb1dfd2165e3d159caefa6b",
+  "java_version": "openjdk version \"21\" 2023-09-19\nOpenJDK Runtime Environment (build 21+35-2513)\nOpenJDK 64-Bit Server VM (build 21+35-2513, mixed mode, sharing)",
+  "finished_utc": "2026-11-04T19:20:35.219419+00:00",
+  "classpath_policy": "Fresh TAG classes and dependencies plus external probe; no development project classes"
+}
