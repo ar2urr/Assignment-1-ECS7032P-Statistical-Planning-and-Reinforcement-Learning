@@ -7,7 +7,7 @@ import players.PlayerParameters;
 import java.util.Arrays;
 import java.util.Objects;
 
-/** Parameters adapted from TAG's permitted players.basicMCTS implementation. */
+/** Search settings adapted from TAG's players.basicMCTS implementation. */
 public class BasicMCTSParams extends PlayerParameters {
     public enum OpponentModel { PARANOID, MAXN }
     public OpponentModel opponentModel = OpponentModel.PARANOID;
@@ -52,7 +52,7 @@ public class BasicMCTSParams extends PlayerParameters {
 
     @Override
     protected BasicMCTSParams _copy() {
-        // TunableParameters.copy transfers registered values and invokes _reset.
+        // TAG copies registered values, then calls _reset to update these fields.
         return new BasicMCTSParams();
     }
 

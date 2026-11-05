@@ -1,11 +1,10 @@
 # Sushi Go coursework
 
-Stages 1–5 are implemented and validated.
-The permitted TAG BasicMCTS baseline has reliability fixes, configurable Sushi Go
-evaluation and switchable PARANOID/MAXN opponent models. Stages 4 and 5 share
-checkpoint `26b8981`. Stage 6 adds a deployment entry point, deterministic
-package export, fresh-TAG validation and independent confirmation. Submission
-metadata and course-version/template confirmation remain outstanding.
+The agent extends TAG BasicMCTS with search fixes, a Sushi Go heuristic and a
+choice of PARANOID or MAXN opponent models. Stages 1-6 are implemented and tested.
+Stages 4/5 share commit `26b8981`; Stage 6 is saved at `fa473bb`. The groupAG
+export is ready for review. The marking TAG revision, competition settings and
+official report template still need confirmation.
 
 ## Documentation
 
@@ -35,9 +34,9 @@ metadata and course-version/template confirmation remain outstanding.
 | `results/` | Validation logs, study protocol, source snapshots, raw games and analysis. |
 | `TAG_COMMIT` | Pinned official TAG revision. |
 
-The development package is `sushigoagent`. The submission export uses the assigned
-package `groupAG`, with matching imports, paths and JSON class names.
-The experiment harness, tests and analysis tools remain outside the agent package.
+Development uses the `sushigoagent` package. The export tool puts the submission
+in `groupAG` and updates the package declarations and JSON class name. Tests,
+experiments and analysis scripts stay outside that package.
 
 ## Build and validation
 
@@ -50,16 +49,14 @@ git -C ../TabletopGames checkout "$(cat TAG_COMMIT)"
 bash scripts/check.sh ../TabletopGames
 ```
 
-For an existing pinned checkout, only the final command is required. `MVN` selects
-an alternative Maven executable; `MAVEN_REPO` selects a dependency-cache directory.
-Initial setup downloads TAG's dependencies. The script checks the framework
-revision, builds TAG and runs seven focused JUnit classes. It leaves TAG source
-unmodified. `check-stage1.sh` delegates to the same current runner.
+If TAG is already checked out at the recorded revision, run only the last command.
+`MVN` chooses the Maven executable; `MAVEN_REPO` chooses its dependency cache. The
+check script builds TAG and runs seven JUnit test classes without editing
+framework source. `check-stage1.sh` calls the same script.
 
-The current Java suite passes **47 tests**. The Python analysis and packaging
-suites pass **7 tests**. The historical Stage 5 records contain 43 and 3 tests,
-respectively. The successful experiment pilot completed all 32 fixed-iteration
-cells, with 384 measured games. Pilot data is excluded from the principal study.
+The latest recorded runs pass 47 Java tests and 7 Python tests. Stage 5's earlier
+records contain 43 and 3 tests. Its pilot covered all 32 comparison cells and
+completed 384 games; those games are excluded from the main results.
 
 ## Experiments
 
@@ -71,33 +68,33 @@ python3 -m venv .venv
 .venv/bin/python scripts/analyse-study.py results/new-study
 ```
 
-The completed principal study contains **16,128 games**, in 32 cells of 504 games: four main variants against
-Random, OSLA and corrected-baseline lineups, plus four feature removals against
-the baseline, at both three and four players. Every cell has balanced seats.
-All search agents use 150 iterations per searched decision. A separate sequential
-timing study covers 28 complete games with the 450 ms configurations and a 25 ms
-reserve. Full protocol, seed policy and reproduction details are in Stage 5.
+The main study has 16,128 games in 32 cells of 504 games. It compares four
+variants against Random, OSLA and corrected-baseline lineups, then removes four
+heuristic features individually. Both three- and four-player games have balanced
+seats. Search agents use 150 iterations per decision. A separate timing study runs
+28 games sequentially with a 450 ms budget and 25 ms reserve. Stage 5 records the
+full protocol and seed policy.
 
-The analyser validated all records and exported summary tables, pointwise 95%
-bootstrap intervals, and PNG/PDF figures. Against baseline lineups, the combined
-agent achieved 75.10% win share with three players and 58.93% with four, compared
-with baseline controls of 32.64% and 26.39%. The heuristic drove the improvement;
-MAXN had no consistent additional benefit. Feature removals identify Wasabi as a
-candidate for revision in four-player games.
+The analysis checks the raw records and produces tables, pointwise 95% bootstrap
+intervals and PNG/PDF figures. Against baseline lineups, the combined agent
+reaches 75.10% win share with three players and 58.93% with four; the controls
+reach 32.64% and 26.39%. The heuristic accounts for most of the gain. MAXN adds no
+consistent improvement, and the Wasabi-removal result suggests a change worth
+testing separately in four-player games.
 
-The timing study recorded 633 searched decisions, including one baseline overrun
-of 509.870 ms. It measures latency and does not establish playing strength at
-500 ms or a universal deadline guarantee. Full interpretation and limitations
-are in the Stage 5 findings.
+The timing study records 633 searched decisions. One baseline decision takes
+509.870 ms, exceeding the 500 ms target. These measurements describe observed
+latency; they do not measure playing strength at 500 ms or guarantee a deadline on
+another machine. The Stage 5 findings discuss the overrun.
 
 ## Limits
 
-Heuristic weights and search settings are fixed, not tuned. The search uses a
-sampled observation and is not information-set MCTS. Recorded seeds do not fully
-control TAG's hidden-state sampling. Fixed iterations do not equalise wall time.
-Deadline checks cannot interrupt framework calls, scheduling or garbage collection;
-sampled timings do not establish a hard deadline guarantee. Compatibility with
-the course's marking revision remains unverified. The exact course revision and official report template remain unconfirmed.
+Weights and search settings were fixed before the study. The search uses a sampled
+observation rather than information-set MCTS, and recorded seeds do not fully
+control TAG's hidden-state sampling. Equal iteration counts also mean different
+amounts of computation across variants. A framework call, scheduling pause or
+garbage collection can delay a timed search. Compatibility with the marking
+revision and compliance with the official report template are still unverified.
 
 ## Submission preparation
 
@@ -111,12 +108,11 @@ python3 scripts/validate-submission.py build/groupAG.zip /path/to/TabletopGames 
   --output build/submission-validation
 ```
 
-The export tool produces `groupAG` without changing development sources. Group AG
-has one member. Repeat validation if the archive or confirmed course revision
-changes. Report files are kept outside Git.
-The separate confirmation contains **2,016 new games**. The selected heuristic
-agent achieves 73.81% win share against baseline lineups with three players and
-59.33% with four. Its gains over baseline are 42.36 and 33.04 percentage points;
-both pointwise 95% bootstrap intervals are positive. These are fixed-iteration
-results and are separate from package timing checks.
-The [Stage 6 record](docs/STAGE_6.md) describes the evidence and remaining details.
+Group AG has one member. The export leaves development sources in place, and
+report files are stored outside Git. Revalidate after changing the archive or the
+marking framework. A separate confirmation with 2,016 new games gives the
+heuristic 73.81% win share against baseline lineups with three players and 59.33%
+with four. The gains over the controls are 42.36 and 33.04 percentage points, with
+both pointwise 95% intervals above zero. These results use 150 iterations and are
+separate from the package timing check. See the [Stage 6 record](docs/STAGE_6.md)
+for details.

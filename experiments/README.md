@@ -1,7 +1,8 @@
 # Experiment support
 
-This directory contains the external evaluation harness and feature-ablation
-configurations. It is outside the agent's runtime submission package.
+This directory holds the game runner and configurations that remove individual
+heuristic features. These files support experiments and are excluded from the
+submitted agent package.
 
 | Path | Responsibility |
 |---|---|
@@ -13,7 +14,7 @@ configurations. It is outside the agent's runtime submission package.
 | `requirements-analysis.txt` | Minimum Python dependencies for numerical analysis and figures. |
 | `analysis-environment.txt` | Exact package versions used for the recorded analysis. |
 
-The parent `scripts/` directory contains `build-experiments.sh`, `run-study.py`
-and `analyse-study.py`. The complete protocol and reproduction commands are in
-[Stage 5](../docs/STAGE_5.md). The principal study is stored under
-`results/stage5/` with separate raw, snapshot and analysis subdirectories.
+The build, study and analysis commands are `scripts/build-experiments.sh`,
+`scripts/run-study.py` and `scripts/analyse-study.py`. [Stage
+5](../docs/STAGE_5.md) explains how to repeat the study. Its records are under
+`results/stage5/`, split into raw data, source snapshots and analysis outputs.

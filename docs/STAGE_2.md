@@ -15,39 +15,39 @@ Status: implemented and validated on 3 November 2026. Basis: Stage 1 commit
 | `scripts/check-stage1.sh` | Compatibility wrapper for the current runner. |
 | `tests/sushigoagent/SearchReliabilityTest.java` | Fourteen reliability regressions. |
 
-The existing BasicMCTS selection, expansion, rollout, scalar backup and
-most-visited decision rule remain. Domain evaluation and opponent modelling are
-separate experimental factors.
+The changes keep BasicMCTS's selection, expansion, rollout, scalar backup and
+choice of the most-visited action. The heuristic and opponent model are added and
+tested in later stages.
 
 ## Decisions
 
-The first action in the supplied legal list is the fallback when no search can be
-completed. A forced action requires no simulation. An empty list is an explicit
-error because no legal result can be returned. Zero depth and zero budgets are
-valid configurations.
+If search cannot complete, the player returns the first action in the supplied
+legal list. A forced move needs no simulation. An empty list raises an error
+because there is no legal action to return. Zero depth and zero budgets remain
+valid settings.
 
-Every simulation state copy and `forwardModel.next` invocation is counted exactly
-where it occurs. UCB selection does not spend a forward-model call. Expansion
-requires one available copy and advance; a rollout reserves its own copy and each
-advance. An operation-budget search exits if an iteration spends no operations,
-preventing a fully terminal/depth-limited tree from looping indefinitely.
+A state copy or `forwardModel.next` call is counted where it happens. UCB
+selection uses neither. Expansion needs a copy and an advance; a rollout needs its
+own copy plus each advance. An operation-budget search stops if an iteration
+spends no operations, so a terminal tree or depth limit cannot cause an endless
+loop.
 
-Time uses `System.nanoTime`, starting at the player entry point. The 450 ms JSON
-budget minus `breakMS=25` gives a 425 ms nominal search cutoff. New iterations also
-require more than twice the longest completed iteration's duration. Checks inside
-selection and rollout avoid knowingly starting further work after that cutoff.
-Individual framework calls, heuristic calls and GC pauses are not preemptible.
+Timing starts at the player entry point and uses `System.nanoTime`. A 450 ms
+budget with `breakMS=25` gives a nominal 425 ms cutoff. Another iteration starts
+only if more than twice the longest completed iteration remains. Selection and
+rollout also check the deadline before further work. A running framework call,
+heuristic call or garbage collection cannot be interrupted.
 
-Expansion and rollout draw from the player's seeded RNG. Simulation copies receive
-seeds from that stream without reseeding the input observation. `LinkedHashMap`
-preserves legal-action order. This supports repeatable iteration searches for an
-identical observation and seed; upstream observation sampling and time-dependent
-iteration counts still prevent guaranteed full-game replay.
+Expansion and rollout share the player's seeded RNG. Simulation copies take seeds
+from that stream; the input observation is not reseeded. `LinkedHashMap` keeps
+action order stable. Iteration searches can therefore repeat for the same
+observation and seed. Full games can still differ because TAG samples observations
+separately and time budgets permit different iteration counts.
 
-Parameter edits use TAG's registration mechanism. A player copy receives a fresh
-RNG with the configured seed, and an optional per-game reset is supported.
-Stateful third-party heuristics would require their own copy policy; Stage 3 uses
-a deeply copied tunable heuristic.
+Settings go through TAG's parameter registry. A copied player gets a new RNG
+starting at its configured seed, with an optional reset before each game. A
+stateful external heuristic would need its own copy handling. The Stage 3 tunable
+heuristic is deeply copied.
 
 ## Validation
 
@@ -63,13 +63,14 @@ The [Stage 2 log](../results/stage2-validation.txt) records `OK (17 tests)`:
 - A controlled monotonic-clock test at the deadline and invalid-input checks.
 - Six wall-clock samples: 194.105–393.303 ms with the time configuration.
 
-These are functional checks. They do not measure statistical playing strength or
-establish deadline compliance on other machines. The Stage 3 run repeats these
-regressions with the custom evaluation tests included.
+These checks test search behaviour rather than playing strength. They also cannot
+establish deadline compliance on another machine. Stage 3 reruns them alongside
+the heuristic tests.
 
 ## Git checkpoint
 
-Stage 2 paths and commands from the repository root:
+The original Stage 2 staging example is shown below. The actual Stage 2/3
+checkpoint is `db219f5`.
 
 ```bash
 git add sushigoagent/BasicMCTSPlayer.java sushigoagent/BasicMCTSParams.java \
@@ -82,7 +83,6 @@ git diff --cached --stat
 git commit -m "stage 2: fix search correctness and decision budgets"
 ```
 
-The Stage 1 record is historical; its original provenance check remains available
-at `a008e35`. The current runner no longer requires the adapted source to match the
-original byte for byte. The root README, package README, shared file guide, stage
-map and requirements update belong to the subsequent Stage 3 checkpoint.
+The original source-comparison check is saved at `a008e35`. Later checks allow the
+developed agent to differ from upstream. Shared readmes, file guides and
+requirements were updated with Stage 3.

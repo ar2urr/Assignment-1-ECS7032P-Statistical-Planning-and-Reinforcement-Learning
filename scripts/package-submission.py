@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a deterministic package-only source ZIP without changing development code."""
+"""Export a repeatable source ZIP while keeping the development package unchanged."""
 import argparse
 import hashlib
 import json
@@ -37,9 +37,9 @@ def package_files(root, package, draft=False):
 
 ## Installation and execution
 
-Requires Java 21 and TAG. The development revision is `{revision}`.
-Extract the `{package}/` directory under TAG's `src/main/java/` and run `mvn compile`.
-No framework edits or files outside this package are required by the agent.
+The agent needs Java 21 and TAG revision `{revision}`.
+Extract `{package}/` into TAG's `src/main/java/` and run `mvn compile`.
+The package contains everything the agent adds to TAG; framework source stays unchanged.
 
 ```java
 core.AbstractPlayer agent = players.PlayerFactory.createPlayer(
@@ -53,43 +53,42 @@ core.AbstractPlayer agent = new {package}.SubmissionPlayer();
 core.AbstractPlayer seeded = new {package}.SubmissionPlayer(7032L);
 ```
 
-The optional seed must fit a signed 32-bit integer. TAG assigns the player ID and
-forward model. `copy()` returns an independent SubmissionPlayer with copied
-parameters and its RNG restarted at the configured seed. There is no persistent
-training data, external model, network access or file loading during play.
+The optional seed must fit a signed 32-bit integer. TAG supplies the player ID
+and forward model. A copy keeps the SubmissionPlayer type and has its own
+parameters and RNG, starting at the configured seed. Play needs no saved training
+data, external model, network connection or file reads.
 
 ## Fixed deployment configuration
 
-The entry point uses the Sushi Go heuristic and PARANOID selection, K = sqrt(2),
-rollout length 10, tree depth 5, epsilon = 1e-6, seed 7032 and all four feature
-weights 1.0. The time budget is 400 ms with breakMS = 25: nominal cutoff 375 ms,
-leaving 125 ms against a 500 ms decision limit. This is a conservative margin,
-not a hard guarantee against a long framework call, JVM pause or OS scheduling.
-The stricter limit is used while the course's conflicting competition settings
-remain unresolved. It also operates under a one-second limit, without using the
-extra time. The separate Stage 5 time configurations used 450 ms, not 400 ms.
+The defaults are the Sushi Go heuristic, PARANOID selection, K = sqrt(2), rollout
+length 10, depth 5, epsilon = 1e-6, seed 7032 and four weights of 1.0. A 400 ms
+budget with breakMS = 25 gives a nominal 375 ms cutoff, leaving 125 ms before the
+500 ms target. A framework call, JVM pause or scheduling delay can still make a
+decision late. The brief gives conflicting limits, so the stricter target is
+used. It also leaves time under the alternative one-second limit. The Stage 5
+time configurations retain their original 450 ms budgets.
 
-Stage 5 supports heuristic evaluation; MAXN gave no consistent additional gain.
-The Wasabi removal result was conditional on MAXN, so it is not transferred to
-this PARANOID configuration without testing. Selection is not a claim of optimality.
+Stage 5 finds a gain from the heuristic but no consistent extra benefit from
+MAXN. Wasabi removal was tested with MAXN, so that change has not been assumed
+to help PARANOID. Other configurations may still perform better.
 
-BasicMCTSPlayer remains the configurable research entry point; its no-argument
-constructor deliberately retains the original score evaluation. Competition
-loading must use SubmissionPlayer or competition.json as shown above.
+BasicMCTSPlayer remains available for experiments, with the original score
+evaluation in its default constructor. Use SubmissionPlayer or competition.json
+for the selected competition settings.
 
 ## Provenance and limitations
 
-BasicMCTSPlayer, BasicMCTSParams and BasicTreeNode adapt TAG's permitted
-players.basicMCTS implementation. LICENSE-TAG.txt retains the upstream MIT licence.
-SearchBudget, SushiGoHeuristic and SubmissionPlayer are project additions.
-The advanced players.mcts implementation is not the development basis.
+BasicMCTSPlayer, BasicMCTSParams and BasicTreeNode are based on TAG's permitted
+players.basicMCTS implementation. LICENSE-TAG.txt keeps the upstream MIT licence.
+SearchBudget, SushiGoHeuristic and SubmissionPlayer were added for this project.
+The code does not use the advanced players.mcts implementation as its basis.
 
-The heuristic uses public tableaus, counters, configured card frequencies and
-hand sizes. Incomplete sets and unused Wasabi use approximate draw probabilities;
-Maki and Pudding use discounted current standings. Search samples a closed-loop
-observation and is not information-set MCTS. Hidden-state sampling is not fully
-seed-controlled. Prior experimental results do not establish tournament strength
-or compatibility with an unconfirmed marking revision.
+The heuristic reads public tableaus and counters, configured card frequencies
+and hand sizes. Sets and unused Wasabi use approximate draw probabilities; Maki
+and Pudding use discounted current standings. Search builds its tree from a
+sampled observation rather than using information-set MCTS. Recorded seeds do
+not fully control hidden-state sampling. The experiments do not establish
+tournament strength or compatibility with an unknown marking revision.
 '''.encode()
     return files
 
@@ -98,7 +97,7 @@ def build(root, package, output, draft=False):
     files = package_files(root, package, draft)
     output = Path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    # Exclusive creation preserves an existing reviewed archive.
+    # Fail if the output already exists, rather than replacing an earlier archive.
     with output.open('xb') as stream:
         with zipfile.ZipFile(stream, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
             for name, data in sorted(files.items()):

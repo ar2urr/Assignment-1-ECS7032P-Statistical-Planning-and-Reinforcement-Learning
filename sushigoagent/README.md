@@ -2,38 +2,38 @@
 
 ## Origin
 
-`BasicMCTSPlayer.java`, `BasicMCTSParams.java` and `BasicTreeNode.java` are adapted
-from the permitted [official TAG BasicMCTS implementation](https://github.com/GAIGResearch/TabletopGames/tree/033232baa88bac4b6a1fe14fae62939193cdf9f7/src/main/java/players/basicMCTS).
-Stage 1 changed only the package declaration; Stage 2 adds reliability fixes.
-Stage 4 adds per-player value statistics and configurable opponent selection.
-`SearchBudget.java` and `SushiGoHeuristic.java` are coursework additions.
-`LICENSE-TAG.txt` preserves the upstream MIT licence.
+`BasicMCTSPlayer.java`, `BasicMCTSParams.java` and `BasicTreeNode.java` come from
+the permitted [TAG BasicMCTS
+implementation](https://github.com/GAIGResearch/TabletopGames/tree/033232baa88bac4b6a1fe14fae62939193cdf9f7/src/main/java/players/basicMCTS).
+Stage 1 changed the package name. Stage 2 fixed search and budget handling, and
+Stage 4 added value vectors and opponent-model selection. `SearchBudget.java`,
+`SushiGoHeuristic.java` and `SubmissionPlayer.java` were added for this project.
+`LICENSE-TAG.txt` keeps the upstream MIT licence.
 
 ## Installation
 
-The entire `sushigoagent` directory belongs under `src/main/java/` in a TAG
-checkout, producing `src/main/java/sushigoagent/`. Standard TAG compilation then
-includes the six Java classes. No changes to `core`, `games` or `players` are
-required. The standalone project's validation script avoids copying files into
-the framework by compiling against TAG's existing classes.
+Place the `sushigoagent` directory under TAG's `src/main/java/` to compile its six
+Java classes. The agent needs no changes to `core`, `games` or `players`. For
+development checks, the repository's validation script compiles against TAG's
+classes without copying source files into the framework.
 
 ## Competition entry point
 
-`competition.json` loads `SubmissionPlayer`, whose no-argument constructor uses
-the Sushi Go heuristic, PARANOID selection and all four weights at 1.0. The
-optional constructor `SubmissionPlayer(long seed)` selects an explicit signed
-32-bit seed. `copy()` retains the concrete entry-point type and independent
-parameters. The budget is 400 ms with a 25 ms reserve, a nominal 375 ms cutoff.
-This adds headroom but cannot guarantee deadlines against framework/JVM/OS pauses.
-The research constructors and configurations below remain unchanged.
+`competition.json` loads `SubmissionPlayer`. Its default constructor uses the
+Sushi Go heuristic, PARANOID selection and four weights of 1.0.
+`SubmissionPlayer(long seed)` accepts a signed 32-bit seed. Copies keep the same
+player class and settings but have their own parameter objects. The 400 ms budget
+and 25 ms reserve give a nominal 375 ms cutoff. Framework calls and JVM or OS
+pauses can still delay the return.
 
 ```java
 core.AbstractPlayer agent = players.PlayerFactory.createPlayer(
     "src/main/java/sushigoagent/competition.json");
 ```
 
-The package-only export has its own standalone README. Packaging and validation
-commands are documented in `docs/STAGE_6.md` in the development repository.
+The exported package includes a README with installation and constructor examples.
+Export and validation commands are in the development repository's
+`docs/STAGE_6.md`.
 
 ## Construction
 
@@ -56,20 +56,19 @@ params.setParameterValue("opponentModel", sushigoagent.BasicMCTSParams.OpponentM
 sushigoagent.BasicMCTSPlayer agent = params.instantiate();
 ```
 
-Available constructors are `BasicMCTSPlayer()`, `BasicMCTSPlayer(long seed)` and
-`BasicMCTSPlayer(BasicMCTSParams params)`. The first two use TAG's default state
-heuristic, K = sqrt(2), rollout length 10, tree depth 5, time budget 450 ms and
-`breakMS=25`, and the PARANOID opponent model. The seed constructor accepts only
-the signed 32-bit range supported
-by TAG's registered `randomSeed` parameter. No constructor loads a JSON file
-implicitly. TAG assigns the forward model and player ID before play.
+The research constructors are `BasicMCTSPlayer()`, `BasicMCTSPlayer(long seed)`
+and `BasicMCTSPlayer(BasicMCTSParams params)`. The first two use TAG's default
+evaluation, PARANOID, K = sqrt(2), rollout length 10, depth 5, a 450 ms budget and
+`breakMS=25`. Seeds must fit TAG's signed 32-bit parameter. Constructors do not
+load JSON files. TAG supplies the forward model and player ID before a game
+starts.
 
-Parameter changes use `setParameterValue`, including dotted feature names such as
-`heuristic.setWeight`. Direct writes to public parameter fields bypass TAG's copy
-registry. `setStateHeuristic` registers its argument. Copying creates independent
-parameters and resets the new player's RNG to its configured seed; it does not
-clone the current RNG stream. `resetSeedEachGame=true` also restarts that stream
-on initialisation.
+Change settings through `setParameterValue`, including dotted names such as
+`heuristic.setWeight`. Writing directly to public fields skips TAG's copy
+registry. `setStateHeuristic` registers the heuristic too. A copied player gets
+independent parameters and a new RNG starting at its configured seed; the current
+RNG stream is not cloned. `resetSeedEachGame=true` restarts the stream when each
+game begins.
 
 ## Configurations
 
@@ -86,54 +85,49 @@ The eight research configurations use seed 7032, K = sqrt(2), rollout length 10 
 | `multiplayer_500ms.json` | TAG default | MAXN | 450 ms, 25 ms reserve |
 | `combined_500ms.json` | Sushi Go features | MAXN | 450 ms, 25 ms reserve |
 
-The time deadline starts on entry to `_getAction`. The reserve gives a nominal
-425 ms search cutoff and 75 ms headroom against a 500 ms external limit. Checks
-occur before simulation operations; a running framework call or GC pause cannot
-be interrupted. Timing measurements are in the Stage 2/3 validation records and the
-[Stage 5 study](../results/stage5/analysis/RESULTS.md).
+Timing starts on entry to `_getAction`. For the eight research configurations, the
+reserve gives a nominal 425 ms cutoff, leaving 75 ms before the 500 ms target.
+Checks run before simulation operations, but cannot interrupt a framework call or
+garbage collection. Measurements are recorded in Stages 2/3 and the [Stage 5
+study](../results/stage5/analysis/RESULTS.md).
 
-The four heuristic weights are `setWeight`, `wasabiWeight`, `makiWeight` and
-`puddingWeight`, each initially 1.0. Setting a weight to 0.0 removes that component.
-All weights must be finite and nonnegative. With all four at zero, the evaluation
-matches TAG's score/50 for nonterminal states and its result value at termination.
-This variant still executes feature calculations, so it is not a runtime-cost
-equivalent of the baseline configuration.
+The weights are `setWeight`, `wasabiWeight`, `makiWeight` and `puddingWeight`, all
+initially 1.0. They must be finite and nonnegative; zero removes a feature's
+contribution. With all four at zero, the values match the baseline: score/50
+during play and TAG's result at termination. Feature calculations still run, so
+this setting costs more than the baseline evaluation.
 
 ## Search and evaluation
 
-The adapted BasicMCTS retains closed-loop UCB selection, random expansion and
-rollouts, and most-visited root selection. PARANOID evaluates only the root
-player's return; opponents minimise that return. MAXN evaluates every player at
-the leaf, backs up a vector of values and selects each mover's own component.
-The actual current player determines the component, including repeated Chopsticks
-turns. Node values are sample means, not deterministic max-n backups.
+The search keeps BasicMCTS's tree of sampled states, UCB selection, random
+expansion and rollouts, and choice of the most-visited root action. PARANOID
+evaluates the root player and makes opponents minimise that value. MAXN evaluates
+every player at a leaf, backs up the vector and selects using the current mover's
+component. It checks the actual mover, including repeated Chopsticks turns. Node
+values are sample means rather than deterministic max-n values.
 
-The supplied root action list is respected, including restrictions. Forced actions
-and exhausted budgets return its first legal action. Parameter copying retains
-`opponentModel`; valid values are `PARANOID` and `MAXN`. The model is independent
-of the selected heuristic. [Stage 4](../docs/STAGE_4.md) documents the rationale,
-regression checks and limits.
+The root uses the supplied legal-action list, including any restrictions. A forced
+move or exhausted budget returns the first legal action. `opponentModel` is copied
+with the parameters and accepts `PARANOID` or `MAXN`, independently of the
+heuristic. [Stage 4](../docs/STAGE_4.md) explains the choice and its tests.
 
-Supported budgets are time, iterations, forward-model calls, state copies and
-combined forward-model/copy calls. `getLastSearchStats()` reports completed
-iterations, actual simulation calls/copies and elapsed nanoseconds. Action-list
-generation and heuristic evaluation are excluded from operation counts but
-included in elapsed time.
+Budgets can count time, iterations, forward-model calls, state copies, or calls
+and copies together. `getLastSearchStats()` returns completed iterations, actual
+simulation calls and copies, and elapsed nanoseconds. Action generation and
+heuristic evaluation count towards elapsed time but not operation budgets.
 
-The custom heuristic adds discounted incomplete-set, unused-Wasabi, Maki and
-Pudding prospects to already-awarded points. It reads public tableaus, counters,
-configured card frequencies and hand size. Hidden hand contents are not used by
-the heuristic. Search still simulates the hidden-card sample supplied in the
-observation; it is not information-set MCTS. Detailed equations, assumptions and
-research hypotheses are in [Stage 3](../docs/STAGE_3.md).
+The heuristic adds estimates for incomplete sets, unused Wasabi, Maki and Pudding
+to points already awarded. It reads public tableaus and counters, configured card
+frequencies and hand sizes. It ignores hand contents. The search still simulates
+TAG's sampled hidden cards, so this is not information-set MCTS. [Stage
+3](../docs/STAGE_3.md) gives the formulas and assumptions.
 
 ## Limits
 
-Playing-strength evidence is reported separately in the
-[Stage 5 results](../results/stage5/analysis/RESULTS.md). Approximate probabilities
-ignore drafting choices and correlations; rank estimates use current standings.
-The nonterminal score/50 scale may exceed 1, while terminal values are -1, 0 and 1,
-matching the baseline convention. This affects search incentives near game end.
-MAXN assumes opponents share the selected evaluation and can reason from the
-sampled state; neither assumption need match their actual behaviour. Final course
-compatibility, package renaming and submission preparation belong to Stage 6.
+The [Stage 5 results](../results/stage5/analysis/RESULTS.md) measure playing
+strength under the recorded settings. Draw estimates ignore drafting choices and
+correlations; Maki and Pudding use current standings. The baseline scale allows
+score/50 to exceed 1 during play, then switches to -1, 0 or 1 at termination,
+which affects incentives near game end. MAXN also assumes opponents use the same
+evaluation and reason from the sampled state. Stage 6 records the groupAG export
+and the remaining course-version checks.

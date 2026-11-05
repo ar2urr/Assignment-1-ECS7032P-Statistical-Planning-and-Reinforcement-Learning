@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run independent, seat-balanced cells and retain raw results and provenance."""
+"""Run comparison cells with balanced seats and save the results and build details."""
 import argparse
 import concurrent.futures
 import csv
@@ -108,7 +108,7 @@ def main():
         for future in concurrent.futures.as_completed(futures):
             future.result()
     if not args.skip_timing:
-        # Timing cells run sequentially, after all fixed-iteration processes finish.
+        # Wait for the iteration runs to finish, then run one timing cell at a time.
         for n in (3, 4):
             for variant in VARIANTS:
                 run_cell(variant, 'random', n, n, '500ms')

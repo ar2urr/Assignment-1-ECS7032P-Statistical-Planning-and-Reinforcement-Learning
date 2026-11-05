@@ -1,17 +1,17 @@
 # Stage 4: multiplayer value selection
 
-Status: implemented and validated on 3 November 2026. Stages 4 and 5 are prepared for one combined
-Git checkpoint, following the Stage 2/3 checkpoint `db219f5`.
+Implemented and tested on 3 November 2026. Stages 4 and 5 share commit `26b8981`,
+following the Stage 2/3 checkpoint `db219f5`.
 
 ## Research question
 
 Does modelling each opponent as maximising its own return improve Sushi Go play
 relative to assuming all opponents minimise the focal player's return?
 
-The self-interest hypothesis fits independent competition for points, but does
-not imply better decisions: evaluation error, hidden cards, finite search and
-extra evaluation cost may offset the benefit. Stage 5 tests this factor both with
-TAG's state evaluation and with the custom heuristic.
+Each player competes for its own points, which motivates the self-interested
+model. It may still make worse decisions if the evaluation is inaccurate, hidden
+cards matter, or the extra evaluations reduce useful search. Stage 5 tests it with
+both TAG's default evaluation and the custom heuristic.
 
 ## Implementation
 
@@ -20,9 +20,9 @@ TAG's state evaluation and with the custom heuristic.
 - `PARANOID` remains the default and preserves the previous opponent model.
 - `MAXN` stores and backs up one evaluation value for each player.
 
-Each node now contains a vector of accumulated values. At a leaf, MAXN evaluates
-the same state once for each player. Backup adds the entire vector at every
-ancestor; it does not negate values or change their player index.
+Each node stores accumulated values for every player. MAXN evaluates the same leaf
+once per player, then adds the whole vector to each ancestor. Backup preserves
+player indices and does not negate values.
 
 For a child with N visits and accumulated value S[p], selection uses:
 
@@ -31,18 +31,18 @@ MAXN:     S[actual mover] / (N + epsilon) + exploration
 PARANOID: sign * S[root player] / (N + epsilon) + exploration
 ```
 
-`sign` is +1 on the root player's turns and -1 on other turns. Exploration keeps
-the existing UCB formula, and the most-visited root action remains the decision.
-The current state determines the mover; depth parity is unsuitable for multiple
-players and consecutive Chopsticks choices.
+`sign` is +1 on the root player's turn and -1 on an opponent's turn. Both modes
+keep the UCB exploration term and choose the most-visited root action. The state
+identifies whose turn it is; depth parity would fail with multiple players and
+consecutive Chopsticks choices.
 
-PARANOID evaluates only the root player's component. MAXN checks every component
-for finite values. A deadline expiry partway through evaluation discards the
-incomplete vector instead of backing up some players' values but not others'.
+PARANOID needs only the root player's value. MAXN checks every evaluated component
+is finite. If time expires partway through a vector, that vector is discarded so
+no player receives a partial backup.
 
-This is MaxN-style MCTS: node statistics are sample means. It is not a replacement
-with classical deterministic max-n search, and the permitted BasicMCTS structure
-remains the development basis. No advanced `players.mcts` implementation is used.
+Node statistics remain MCTS sample means. The change uses the max-n opponent
+assumption within the permitted BasicMCTS structure; it does not replace the tree
+with deterministic max-n search or use the advanced `players.mcts` implementation.
 
 ## Configurations
 
@@ -51,10 +51,10 @@ remains the development basis. No advanced `players.mcts` implementation is used
 | TAG default | `baseline_iterations.json` | `multiplayer_iterations.json` |
 | Sushi Go features | `heuristic_iterations.json` | `combined_iterations.json` |
 
-Matching `_500ms.json` files use 450 ms budgets with a 25 ms reserve. Every JSON
-file states its opponent model explicitly. Search depth, rollout length,
-exploration constant and seed policy are otherwise matched. Parameter copying
-retains the selected model.
+The matching `_500ms.json` files use a 450 ms budget and 25 ms reserve. Every
+configuration names its opponent model. Depth, rollout length, exploration
+constant and seed policy otherwise match, and parameter copies keep the selected
+model.
 
 ## Validation and development findings
 
@@ -63,37 +63,33 @@ The subsequent [Stage 5 log](../results/stage5-validation.txt) adds three harnes
 tests and records 43 passing tests. Both include all prior scoring and reliability
 regressions.
 
-The synthetic game has a branch where an opponent benefits by helping the root
-player and another branch that harms the root while giving the opponent less.
-MAXN and PARANOID correctly select different root actions across every seat in
-three- and four-player games and two seeds. Separate tests cover repeated turns,
-configuration copying, opponent values that are not finite, partial vector expiry
-and combined operation budgets. Both new variants also complete games in every
-seat for both player counts.
+In the synthetic game, an opponent can help the root player while earning more
+itself, or hurt the root while earning less. MAXN and PARANOID choose different
+root actions as expected across all seats, both player counts and two seeds. Other
+tests cover consecutive turns, parameter copying, nonfinite values, incomplete
+vectors and combined operation budgets. Both variants also complete games from
+every seat with three and four players.
 
-An initial synthetic test used K=0.4 and failed at 2,000 iterations because a
-poor first sample suppressed further exploration. The fixture now uses the
-production exploration constant sqrt(2). No universal finite-budget convergence
-claim follows from this test.
+The first synthetic test used K=0.4 and failed after 2,000 iterations: a poor
+early sample discouraged further exploration. The test now uses the production
+value sqrt(2). Passing it does not guarantee convergence at every finite budget.
 
-The first development run also recorded a 594.752 ms sample with an unbounded
-default JVM heap. Later tests and experiments use `-Xms128m -Xmx512m` to limit
-heap growth and potential collection pauses. The successful rerun does not prove
-that heap size was the sole cause. Deadline checks cannot interrupt a framework
-call, heuristic call, OS scheduling pause or garbage collection. The full timing
-study records every observed overrun rather than dropping slow decisions.
+An early development run recorded 594.752 ms with no explicit JVM heap cap. Later
+runs use `-Xms128m -Xmx512m` to limit heap growth and possible collection pauses.
+The successful rerun cannot identify heap size as the sole cause. Deadline checks
+cannot interrupt framework calls, heuristic calls, scheduling pauses or garbage
+collection. The timing study keeps every slow decision in its records.
 
 ## Background and limits
 
-Self-interested max-n and paranoid assumptions can perform differently across
-games. Sturtevant's [A Comparison of Algorithms for Multi-player Games](https://cs.du.edu/~sturtevant/papers/comparison_algorithms.pdf)
-(CG 2002; proceedings published 2003) gives examples of this dependence and
-discusses tie-breaking limitations. That work concerns other games and does not
-establish which assumption is stronger in Sushi Go.
+Sturtevant's [A Comparison of Algorithms for Multi-player
+Games](https://cs.du.edu/~sturtevant/papers/comparison_algorithms.pdf) (CG 2002;
+proceedings published 2003) shows that max-n and paranoid search can perform
+differently across games and discusses tie breaking. It studies other games, so it
+does not settle which model works better in Sushi Go.
 
-The current implementation keeps seeded random tie-breaking and a closed-loop
-tree based on the sampled observation. MAXN does not make the search
-information-set aware: simulated opponents can still act on the sampled state,
-and several decisions occur before a simultaneous reveal. The heuristic remains
-approximate, and modelling all opponents with the same evaluation may be wrong.
-These limitations apply to interpreting the Stage 5 evidence.
+The search still uses seeded random tie breaking and a tree built from a sampled
+observation. MAXN does not resolve imperfect information: opponents reason from
+that sample, and some choices happen before a simultaneous reveal. The heuristic
+is approximate, and real opponents may use different evaluations. These
+assumptions limit how far the Stage 5 findings can be generalised.

@@ -12,7 +12,7 @@ mkdir -p "$project_dir/build"
     -DskipTests compile dependency:build-classpath -DincludeScope=test \
     -Dmdep.outputFile="$project_dir/build/dependencies.txt"
 classes_dir=$(mktemp -d "$project_dir/build/experiments.XXXXXX")
-# Freeze framework bytecode so another Maven compilation cannot disrupt a live study.
+# Give the study its own framework JAR so later Maven builds cannot remove its classes.
 if [[ -n "${TAG_JAR:-}" ]]; then
     cp "$TAG_JAR" "$classes_dir/framework.jar"
 else

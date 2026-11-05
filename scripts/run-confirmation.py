@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent fixed-iteration confirmation of the preselected heuristic policy."""
+"""Check the selected heuristic policy on new games with a fixed iteration budget."""
 import argparse
 import concurrent.futures
 import csv
@@ -93,12 +93,21 @@ def main():
         if sha(ROOT/rel)!=h:raise ValueError('Source changed during confirmation: '+rel)
     report=out/'analysis';report.mkdir()
     analysis.write_csv(report/'summary.csv',summaries);analysis.write_csv(report/'effects.csv',effects)
-    lines=['# Stage 6 independent confirmation','','The heuristic/PARANOID policy was selected from Stage 5 before this run. Both cells at each player count use new game seeds, 150 iterations and baseline opponents. The control is baseline versus baseline. These games are separate from the primary study and do not estimate playing strength under the deployment time budget.','',
+    lines=['# Stage 6 independent confirmation','','Heuristic/PARANOID was selected from Stage 5 before this run began. At each '
+                                                   'player count, it and the baseline control face baseline opponents with new '
+                                                   'game seeds and 150 iterations per decision. These games are separate from '
+                                                   'the main study. They test the chosen policy at that iteration budget, not '
+                                                   'its strength under the deployment time limit.','',
            '| Players | Variant | Games | Win share | Pointwise 95% CI |','|---|---|---:|---:|---|']
     for row in summaries:lines.append(f"| {row['players']} | {row['variant']} | {row['games']} | {100*row['win_share']:.2f}% | {100*row['low95']:.2f} to {100*row['high95']:.2f}% |")
     lines+=['','| Players | Heuristic minus baseline | Pointwise 95% CI |','|---|---:|---|']
     for row in effects:lines.append(f"| {row['players']} | {100*row['heuristic_minus_baseline']:.2f} pp | {100*row['low95']:.2f} to {100*row['high95']:.2f} pp |")
-    lines+=['','Intervals use 5,000 within-seat bootstrap resamples with independent cell draws. They are pointwise and unadjusted for multiple comparisons. This confirms or challenges a preselected policy; it does not compare it with every alternative. TAG hidden-state sampling remains incompletely seed-controlled. Fixed-iteration latency diagnostics are not pooled with the separate sequential deployment check.','']
+    lines+=['','Intervals use 5,000 bootstrap resamples within seats and independent draws '
+               'between cells. They are pointwise and unadjusted for multiple comparisons. '
+               'This run tests a policy chosen in advance; it does not compare every '
+               "alternative. Recorded seeds still do not fully control TAG's hidden-state "
+               'sampling. Timings from these iteration runs stay separate from the '
+               'sequential deployment check.','']
     (report/'RESULTS.md').write_text('\n'.join(lines))
     manifest.update({'completed':True,'finished_utc':now(),'measured_games':4*args.games,'no_game_seed_overlap_with_stage5':True})
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

@@ -5,20 +5,18 @@ Source: `Assignment 1 Rubric.pdf`, ECS7032P Assignment 1. Review date:
 
 ## Experimental design
 
-The rubric treats fewer than 500 games per agent pair as insufficient. The
-principal protocol contains 504 games per reported lineup comparison:
-32 fixed-iteration cells and 16,128 measured games. The baseline validation
-games and experiment pilots are functionality tests only.
+The rubric calls fewer than 500 games per agent pair insufficient. The main study
+has 504 games per lineup: 32 cells and 16,128 measured games in total. Baseline
+checks and pilot games test functionality and are kept separate.
 
-The top band expects more than one framework agent plus the developed agent's
-base version. Stage 5 comparators are Random, OSLA and the corrected baseline.
-The ablation design contains four conditions: baseline, heuristic only,
-multiplayer modification only, and both modifications. Reliability fixes remain
-constant across those conditions to avoid confounding the algorithmic effects.
-Four further conditions remove individual heuristic features. A separate 28-game
-timing study measures decisions at the 500 ms target; it is not a large-sample
-playing-strength comparison at that budget. The [Stage 5 protocol](STAGE_5.md)
-and [results](../results/stage5/analysis/RESULTS.md) retain this distinction.
+The top band asks for more than one framework agent and the developed agent's
+baseline. Stage 5 compares against Random, OSLA and the corrected baseline. Four
+conditions isolate the heuristic, the multiplayer change and their combination.
+All share the same reliability fixes. Four more conditions remove heuristic
+features individually. A separate 28-game study checks latency at the 500 ms
+target. Its sample does not support a claim about playing strength at that budget;
+see the [protocol](STAGE_5.md) and
+[results](../results/stage5/analysis/RESULTS.md).
 
 ## Required evidence
 
@@ -36,28 +34,29 @@ and [results](../results/stage5/analysis/RESULTS.md) retain this distinction.
 
 ## Baseline and originality
 
-Stage 1 provides a traceable control. An unchanged framework agent would not
-satisfy the originality criterion as a final approach. The implemented heuristic and
-MaxN-style variant require justification against the lectures and prior work;
-their empirical effects are assessed by Stage 5 and do not alone establish novelty.
+Stage 1 gives the project a traceable baseline. Submitting that unchanged agent
+would not meet the originality criterion. The report must explain why the
+heuristic and MAXN variant suit Sushi Go, using the lectures and prior work. Stage
+5 measures their effects, but a performance gain alone does not make an algorithm
+novel.
 
 ## Stage 6 evidence
 
-The editable report is stored outside Git. It presents the motivation, search
-changes, critical background, primary results, limitations and deployment choice
-within four pages of main content, with references and AI-use notes on page five.
-Exact template compliance still depends on the official course template.
+The editable report stays outside Git. Its four pages of main content cover the
+motivation, search changes, background, experiments and deployment choice.
+References and AI-use notes occupy page five. The layout still needs checking
+against the official course template.
 
-The preselected heuristic/PARANOID policy has a separate 2,016-game confirmation
-protocol, with 504 games per cell, new recorded game seeds and independent
-seat-stratified bootstrap intervals. Completion metadata and raw evidence are
-retained separately from Stage 5. The package-only `groupAG` export is compiled
-in a fresh TAG tree and exercised through JSON, direct and copied construction.
-The [Stage 6 record](STAGE_6.md) states the measured outcomes and remaining limits.
+Stage 6 tests the selected heuristic/PARANOID policy on 2,016 further games: 504
+per cell, with new recorded seeds and bootstrap intervals that preserve seat
+proportions. Its raw data and completion records are separate from Stage 5. The
+groupAG ZIP is also compiled in a fresh TAG tree and tested through JSON loading,
+direct construction and copied players. The [Stage 6 record](STAGE_6.md) gives the
+results.
 
-These checks improve the evidence and submission preparation; they do not
-establish a particular mark, novel algorithm, equal-time tournament strength or
-compatibility with an unconfirmed marking framework.
+These checks support the submission's evidence. They do not predict a mark,
+establish algorithmic novelty, measure strength under equal time budgets or verify
+an unknown marking revision.
 
 ## Unresolved specification details
 

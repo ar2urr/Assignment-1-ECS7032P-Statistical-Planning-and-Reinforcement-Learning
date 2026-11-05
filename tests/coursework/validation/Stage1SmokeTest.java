@@ -21,7 +21,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-/** Integration checks introduced with the Stage 1 baseline. */
+/** Checks JSON loading, copying and complete games for the Stage 1 baseline. */
 public class Stage1SmokeTest {
     private String configPath(String name) {
         return Path.of(System.getProperty("coursework.project"), "sushigoagent", name).toString();
@@ -102,9 +102,9 @@ public class Stage1SmokeTest {
             return selected;
         }
 
-        // SGGameState._equals calls super.equals in the pinned upstream revision,
-        // causing recursion. Compare public game data without changing TAG itself.
-        // This checks these fields only; it does not inspect private decks or RNGs.
+        // In this TAG revision, SGGameState._equals recurses through super.equals.
+        // Compare public game fields instead, without patching the framework.
+        // Private decks and RNG state are outside this check.
         private String observableSnapshot(SGGameState state) {
             StringBuilder snapshot = new StringBuilder();
             snapshot.append(state.getCurrentPlayer()).append('|')

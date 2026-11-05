@@ -19,23 +19,24 @@ rubric for ECS7032P Assignment 1.
 
 ## Experiments
 
-The initial prose describes 500 games per experiment as a guideline with justified
-exceptions. The detailed rubric deems fewer than 500 games per agent pair
-insufficient. The principal protocol uses 504 games per reported lineup
-comparison, with balanced seats at both player counts. Development smoke tests
-and pilots are separate from this study.
+The assignment text treats 500 games per experiment as a guideline and allows
+justified exceptions. The detailed rubric calls fewer than 500 games per agent
+pair insufficient. The main study therefore uses 504 games per lineup, with
+balanced seats at both player counts. Smoke tests and pilots are counted
+separately.
 
-The top experimentation band requires more than one framework reference agent,
-the base version of the developed agent and thorough ablations. Stage 5 includes
-Random and OSLA, alongside the corrected baseline, and tests both algorithmic
-factors plus four feature removals. Some experiments at the 500 ms level are
-required by the assignment text. The selected scope uses a smaller latency study
-at that limit; it does not establish 500 ms playing strength or replace any
-full-size timed comparison the teaching team may require.
+The top experimentation band asks for more than one framework reference agent, the
+developed agent's baseline and thorough ablations. Stage 5 uses Random, OSLA and
+the corrected baseline, tests both algorithmic changes and removes each heuristic
+feature in turn. The brief also requires some experiments at the 500 ms level. The
+smaller timing study addresses observed latency at that target; it does not
+measure playing strength at 500 ms or replace any larger timed comparison required
+by the teaching team.
 
-The report requires enough configuration detail for replication, uncertainty
-analysis and explanations of the observed results. Novelty and ambition are
-assessed against course content and relevant literature.
+The report must give enough detail to repeat the experiments, explain the
+uncertainty in the results and discuss what those results mean. Claims about
+novelty must be supported by comparison with course material and relevant
+literature.
 
 ## Submission
 
@@ -54,15 +55,13 @@ assessed against course content and relevant literature.
 | Code / tournament description | 3 | 1 second |
 | Experiments section | 4 | 500 milliseconds |
 
-The conflict remains unresolved. All four main variants are tested with both
-player counts. Time configurations use a 450 ms budget and `breakMS=25`.
-Stage 5 measures searched decisions across 28 complete games. These samples do
-not establish a hard deadline guarantee or compliance on the marking machine.
+The two competition descriptions conflict. Stage 5 tests both player counts, using
+450 ms time configurations with `breakMS=25`. Its 28 timing games provide observed
+latencies, not a deadline guarantee on the marking machine.
 
-The rubric's meaning of "per pair" also requires clarification for multiplayer
-experiments. The implemented protocol uses fixed opponent lineups, recorded
-player counts and balanced seats, with 504 games per principal matchup.
-The [Stage 5 record](STAGE_5.md) defines the protocol and its limitations.
+For multiplayer experiments, "per pair" needs clarification. The study defines
+each comparison by its opponent lineup and player count, then runs 504 games with
+balanced seats. [Stage 5](STAGE_5.md) records the protocol and its limits.
 
 ## Assessment weights
 

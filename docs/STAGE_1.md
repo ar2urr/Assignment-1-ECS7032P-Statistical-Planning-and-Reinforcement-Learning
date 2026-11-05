@@ -3,15 +3,15 @@
 Status: complete. Validation date: 3 November 2026. Historical checkpoint:
 `a008e35` (`Add Stage 1 baseline implementation for Sushi Go agent`).
 
-This record describes that commit. Current source includes the later Stage 2
-adaptations and Stage 3 heuristic; the original baseline remains in Git history.
+This record describes the Stage 1 commit. Later stages changed the search and
+added the heuristic and opponent model. The original baseline is still available
+in Git history.
 
 ## Scope
 
-The baseline consists of three official BasicMCTS Java files under
-`sushigoagent`, with only their package declarations changed. Supporting files
-include two JSON configurations, the upstream MIT licence, documentation, a
-validation script and focused JUnit tests.
+The baseline copies three official BasicMCTS Java files into `sushigoagent`,
+changing only their package declarations. Two JSON configurations, the MIT
+licence, documentation, a validation script and JUnit checks accompany the source.
 
 ## Provenance
 
@@ -41,19 +41,19 @@ Environment: macOS, OpenJDK 21, IntelliJ-bundled Maven 3.9.9 and JUnit 4.13.2.
 
 Historical output: [stage1-validation.txt](../results/stage1-validation.txt).
 
-The seven games against Random players validate functionality. They do not
-establish general playing strength. The 450 ms configuration was loaded but not
-benchmarked.
+Seven games against Random check that the baseline runs correctly. They are too
+few to establish playing strength. The 450 ms configuration was loaded during
+validation, but its timing was not benchmarked at this stage.
 
 ## State-comparison issue
 
 In the pinned TAG revision, `SGGameState._equals` calls `super.equals`, which calls
 `_equals` again and causes a `StackOverflowError` during whole-state comparison.
 
-The test instead snapshots public fields before and after search: turn, round,
-current player, status, card choices, hand/played card identities, scores, results
-and card counters. Private decks and random generators are outside this check.
-No framework change is required.
+The test saves public fields before search and compares them afterwards: turn,
+round, current player, status, card choices, hand and played-card identities,
+scores, results and card counters. It does not inspect private decks or RNG state,
+and needs no framework patch.
 
 ## Baseline limitations
 
@@ -66,5 +66,5 @@ No framework change is required.
   the forward-model call count.
 - Deadline checks occur between iterations and require timing validation.
 
-These limitations defined the Stage 2 reliability work. At this checkpoint,
-the baseline contained no custom heuristic or multiplayer modification.
+Stage 2 addresses these search and budget problems. Stage 1 has neither a custom
+heuristic nor the later multiplayer changes.

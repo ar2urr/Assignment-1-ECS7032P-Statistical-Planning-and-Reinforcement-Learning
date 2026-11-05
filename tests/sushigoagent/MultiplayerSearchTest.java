@@ -41,8 +41,8 @@ public class MultiplayerSearchTest {
 
     @Test
     public void maxNModelsSelfInterestWhileParanoidModelsHostilityAtEveryRootSeat() {
-        // Branch 0 offers the opponent either (root=.8, opponent=.9) or (-.8,.2).
-        // Branch 1 guarantees root=.1. Different players therefore prefer different leaves.
+        // In branch 0, the opponent chooses between (.8,.9) and (-.8,.2), root first.
+        // Branch 1 gives the root .1, so the two opponent models favour different branches.
         for (int n : List.of(3, 4)) for (int root = 0; root < n; root++) {
             for (int seed : List.of(7, 88)) for (var mode : BasicMCTSParams.OpponentModel.values()) {
                 ToyState state = state(n, root, false);

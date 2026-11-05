@@ -119,7 +119,7 @@ public class SushiGoHeuristicTest {
 
     @Test
     public void makiAndPuddingProjectionsMatchFrameworkAcrossAllSmallStandings() {
-        // Exhaust all counts 0..3 for 2, 3 and 4 players, including every tie pattern.
+        // Check every combination of counts 0..3 for 2, 3 and 4 players, including ties.
         for (int n = 2; n <= 4; n++) {
             SGGameState state = state(n);
             for (int encoding = 0; encoding < (1 << (2 * n)); encoding++) {

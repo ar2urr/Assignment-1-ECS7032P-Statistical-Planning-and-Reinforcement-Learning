@@ -15,7 +15,7 @@ mkdir -p "$project_dir/build"
     -DskipTests compile dependency:build-classpath -DincludeScope=test \
     -Dmdep.outputFile="$project_dir/build/dependencies.txt"
 framework_path="$tag_dir/target/classes:$(cat "$project_dir/build/dependencies.txt")"
-# A fresh class directory prevents deleted source files leaving loadable classes.
+# Compile into a new directory so deleted sources cannot leave stale classes.
 classes_dir=$(mktemp -d "$project_dir/build/check.XXXXXX")
 trap 'rm -rf "$classes_dir"' EXIT
 sources=("$project_dir"/sushigoagent/*.java "$project_dir"/experiments/coursework/experiments/*.java)

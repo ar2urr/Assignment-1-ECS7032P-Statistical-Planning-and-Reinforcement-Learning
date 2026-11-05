@@ -1,15 +1,15 @@
 # Implementation stages
 
-Status: Stages 1–5 are implemented and validated. Stage 6 submission preparation
-is implemented; administrative details and official course-version/template
-confirmation remain outstanding. Stage 1 is committed at `a008e35`, Stages 2/3
-share `db219f5`, and Stages 4/5 share `26b8981`. Stage 6 changes are uncommitted.
+Stages 1-6 are implemented and tested. The report's author details, official
+template and marking-framework checks remain to be completed. The saved
+checkpoints are `a008e35` for Stage 1, `db219f5` for Stages 2/3, `26b8981` for
+Stages 4/5 and `fa473bb` for Stage 6.
 
-Validation records: [Stage 1](STAGE_1.md), [Stage 2](STAGE_2.md),
-[Stage 3](STAGE_3.md), [Stage 4](STAGE_4.md), [Stage 5](STAGE_5.md),
-[Stage 6](STAGE_6.md).
-The historical Stage 2/3 staging examples are superseded by the actual combined
-checkpoint. No build, test or experiment script creates Git commits.
+Validation records: [Stage 1](STAGE_1.md), [Stage 2](STAGE_2.md), [Stage
+3](STAGE_3.md), [Stage 4](STAGE_4.md), [Stage 5](STAGE_5.md) and [Stage
+6](STAGE_6.md). The separate staging commands in the early records are historical
+examples; Stages 2/3 were committed together. Build and experiment scripts do not
+create commits.
 
 | Stage | Scope | Completion criteria | Commit message |
 |---|---|---|---|
@@ -22,25 +22,24 @@ checkpoint. No build, test or experiment script creates Git commits.
 
 ## Dependencies
 
-Stages 1–2 establish the comparison baseline. Stage 3 isolates domain evaluation;
-Stage 4 isolates the opponent model. Stage 5 measures their effects separately and
-together. Stage 6 uses those findings in the report.
+Stages 1-2 provide the comparison baseline. Stage 3 adds the heuristic, and Stage
+4 adds the opponent model. Stage 5 tests each change separately and together.
+Stage 6 selects the submission settings and checks the exported package.
 
-Research contributions require comparison with the lectures and existing methods.
-A known heuristic or MaxN variant alone does not establish originality.
+The report compares the approach with the lectures and prior work. Using a known
+heuristic or MAXN variant does not by itself show originality.
 
 ## Experimental protocol
 
-The [rubric mapping](RUBRIC_REVIEW.md) specifies at least 500 games per principal
-comparison and two framework reference agents in addition to the baseline.
-Short development or timing pilots remain separate from the principal study.
+The [rubric mapping](RUBRIC_REVIEW.md) calls for at least 500 games per main
+comparison, two framework reference agents and the developed agent's baseline.
+Development and timing pilots are recorded separately.
 
-For multiplayer experiments, a matchup has a fixed opponent lineup, player count
-and seat-balancing policy. A pooled set of 500 games does not establish 500
-independently played games against each distinct opponent. The implemented study
-uses 504 games per lineup, with both player counts and
-balanced seats. The rubric's meaning of "per pair" still requires confirmation
-before final submission.
+Each multiplayer matchup fixes the opponent lineup, player count and seat
+allocation. The study runs 504 games per lineup with balanced seats at both player
+counts. Pooling games from different lineups would not provide 500 games against
+each opponent. The teaching team's meaning of "per pair" still needs confirmation
+for multiplayer play.
 
 ## Outstanding dependencies
 

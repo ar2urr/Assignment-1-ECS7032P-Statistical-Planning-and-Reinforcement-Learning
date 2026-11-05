@@ -16,7 +16,7 @@ import java.nio.file.*;
 import java.time.Instant;
 import java.util.*;
 
-/** External evaluation harness; none of this code is part of the submitted agent. */
+/** Runs experiment games outside the agent package submitted for marking. */
 public final class ExperimentRunner {
     public static final List<String> VARIANTS = List.of("baseline", "heuristic", "multiplayer", "combined",
             "combined_no_sets", "combined_no_wasabi", "combined_no_maki", "combined_no_pudding");
@@ -32,7 +32,7 @@ public final class ExperimentRunner {
     }
 
     public static long gameSeed(long master, int cell, int index) {
-        // Each cell has an independent seed stream; comparisons use unpaired analysis.
+        // Give each cell its own seed stream for the unpaired comparisons.
         return new SplittableRandom(master + 1_000_003L * cell + 104_729L * index).nextLong();
     }
 
@@ -67,7 +67,7 @@ public final class ExperimentRunner {
         int cell = (mode.equals("500ms") ? 100 : 0) + n * 24 + VARIANTS.indexOf(variant) * 3 + OPPONENTS.indexOf(opponent);
         long started = System.nanoTime();
         String startTime = Instant.now().toString();
-        // Warmup games are separate from measured samples and always use iterations.
+        // Warm up with iteration budgets and keep these games out of the results.
         for (int i = 0; i < 8; i++) play(project, variant, opponent, n, i, gameSeed(master, cell, -100 - i),
                 "iterations", null, null);
         Path decisionPath = output.resolve(id + ".decisions.partial.csv");

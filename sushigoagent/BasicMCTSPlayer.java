@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-/** Reliability modifications to TAG's permitted BasicMCTS player. */
+/** TAG BasicMCTS with legal-action fallbacks, seeded sampling and budget checks. */
 public class BasicMCTSPlayer extends AbstractPlayer {
     public record SearchStats(long iterations, long fmCalls, long copyCalls, long elapsedNanos) {}
     private SearchStats lastSearchStats = new SearchStats(0, 0, 0, 0);
@@ -18,7 +18,7 @@ public class BasicMCTSPlayer extends AbstractPlayer {
         this(new BasicMCTSParams());
     }
 
-    /** TAG's registered randomSeed parameter is a signed 32-bit integer. */
+    /** The seed must fit TAG's signed 32-bit randomSeed parameter. */
     public BasicMCTSPlayer(long seed) {
         this(parametersWithSeed(seed));
     }
@@ -45,7 +45,7 @@ public class BasicMCTSPlayer extends AbstractPlayer {
             throw new IllegalArgumentException("At least one legal action is required");
         SearchBudget budget = new SearchBudget(getParameters(), started, System::nanoTime);
         AbstractAction selected = actions.get(0);
-        // Preserve a legal fallback for forced moves, zero depth and exhausted budgets.
+        // Keep a legal move available even if the search cannot expand a child.
         if (actions.size() > 1 && gameState.isNotTerminal()
                 && getParameters().maxTreeDepth > 0 && budget.canStartIteration()) {
             Objects.requireNonNull(getForwardModel(), "Forward model must be assigned before search");

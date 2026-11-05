@@ -1,6 +1,6 @@
 # Stage 6 independent confirmation
 
-The heuristic/PARANOID policy was selected from Stage 5 before this run. Both cells at each player count use new game seeds, 150 iterations and baseline opponents. The control is baseline versus baseline. These games are separate from the primary study and do not estimate playing strength under the deployment time budget.
+Heuristic/PARANOID was selected from Stage 5 before this run began. At each player count, it and the baseline control face baseline opponents with new game seeds and 150 iterations per decision. These games are separate from the main study. They test the chosen policy at that iteration budget, not its strength under the deployment time limit.
 
 | Players | Variant | Games | Win share | Pointwise 95% CI |
 |---|---|---:|---:|---|
@@ -14,4 +14,4 @@ The heuristic/PARANOID policy was selected from Stage 5 before this run. Both ce
 | 3 | 42.36 pp | 36.90 to 47.92 pp |
 | 4 | 33.04 pp | 27.38 to 38.79 pp |
 
-Intervals use 5,000 within-seat bootstrap resamples with independent cell draws. They are pointwise and unadjusted for multiple comparisons. This confirms or challenges a preselected policy; it does not compare it with every alternative. TAG hidden-state sampling remains incompletely seed-controlled. Fixed-iteration latency diagnostics are not pooled with the separate sequential deployment check.
+Intervals use 5,000 bootstrap resamples within seats and independent draws between cells. They are pointwise and unadjusted for multiple comparisons. This run tests a policy chosen in advance; it does not compare every alternative. Recorded seeds still do not fully control TAG's hidden-state sampling. Timings from these iteration runs stay separate from the sequential deployment check.

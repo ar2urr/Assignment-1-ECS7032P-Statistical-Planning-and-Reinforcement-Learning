@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.nio.file.*;
 import java.util.*;
 
-/** Standalone archive check. No imports or classpath links to development agent classes. */
+/** Tests the exported archive without loading agent classes from the development project. */
 public final class SubmissionProbe {
     private static final List<Double> latency = new ArrayList<>();
     private static int games;

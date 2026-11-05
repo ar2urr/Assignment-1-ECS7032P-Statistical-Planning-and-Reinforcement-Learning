@@ -2,7 +2,8 @@
 
 ## Folder layout
 
-All Stage 1–6 source and support files are included in the standalone repository.
+This repository contains the source, tests and supporting files for all six
+stages.
 
 ```text
 repository/
@@ -35,16 +36,18 @@ repository/
   .gitignore
 ```
 
-`build/`, local IDE settings, virtual environments and compiled classes are
-generated locally and excluded from Git. Study source snapshots use `.java.txt`
-to preserve exact source bytes without creating duplicate Java classes in IDEs.
+Git excludes generated build files, local IDE settings, virtual environments and
+compiled classes. Saved study sources use `.java.txt` so Java editors do not treat
+them as duplicate classes. These snapshots keep the exact code used for each
+recorded run.
 
 ## Runtime package
 
-For installation into TAG, the complete `sushigoagent/` directory belongs at
-`TAG/src/main/java/sushigoagent/`. The submission export uses
-`groupAG/`, installed at `TAG/src/main/java/groupAG/`, with matching imports,
-JSON class names and paths. Development tests, experiments and documents remain outside this package.
+For development, place `sushigoagent/` at `TAG/src/main/java/sushigoagent/`. The
+submission ZIP instead contains `groupAG/`, which belongs at
+`TAG/src/main/java/groupAG/`. The exporter updates package declarations and JSON
+class names. Tests, experiments and documentation stay outside the submitted
+package.
 
 | File in `sushigoagent/` | Responsibility | Stage |
 |---|---|---|
@@ -96,26 +99,26 @@ JSON class names and paths. Development tests, experiments and documents remain 
 
 ## Documents and evidence
 
-`docs/STAGES.md` tracks all six stages. `STAGE_1.md` through `STAGE_6.md` document
-the respective implementation or experiment. Stage 1 records commit `a008e35`;
-Stages 2/3 share `db219f5`; Stages 4/5 share `26b8981`. Historical
-per-stage staging examples do not change those actual checkpoints.
+`docs/STAGES.md` lists all six stages; `STAGE_1.md` through `STAGE_6.md` record
+their changes and checks. The commits are `a008e35` for Stage 1, `db219f5` for
+Stages 2/3, `26b8981` for Stages 4/5 and `fa473bb` for Stage 6. Earlier documents
+retain their original staging examples.
 
-`docs/STAGE_5_FINDINGS.md` interprets the measured effects and timing limitations.
-`docs/REQUIREMENTS.md` retains the coursework constraints and unresolved course
-details. `docs/RUBRIC_REVIEW.md` maps criteria to evidence and remaining report work.
-`results/stage5/analysis/RESULTS.md` contains generated findings tables, with
-`summary.csv`, `contrasts.csv`, `feature-effects.csv` and `timing-summary.csv`
-preserving numeric precision. `validation.json` records the analysis version,
-hash and validated counts. The three figure pairs are `main-comparisons`,
-`feature-ablations` and `decision-timing`, each in PNG and vector PDF format.
+`docs/STAGE_5_FINDINGS.md` explains the results and timing limits.
+`docs/REQUIREMENTS.md` records coursework rules and unresolved details;
+`docs/RUBRIC_REVIEW.md` maps the evidence to marking criteria. The results summary
+is in `results/stage5/analysis/RESULTS.md`. Exact values are kept in
+`summary.csv`, `contrasts.csv`, `feature-effects.csv` and `timing-summary.csv`.
+`validation.json` records the analysis version, hash and checked counts. The
+figures are `main-comparisons`, `feature-ablations` and `decision-timing`, each
+saved as PNG and vector PDF.
 
-The 43-test Java suite is captured in `results/stage5-validation.txt`.
-`results/stage5-analysis-tests.txt` records the three Python tests;
-`results/stage5-analysis-validation.txt` records full-study data validation. Earlier
-validation files preserve the evidence from their development stages. Raw study
-data includes per-cell metadata and progress logs; separate warmup and pilot games
-are excluded from the measured results.
+`results/stage5-validation.txt` records 43 passing Java tests.
+`stage5-analysis-tests.txt` records three Python tests, and
+`stage5-analysis-validation.txt` records the full data check. Earlier logs
+describe their own development stages. Each study cell has raw data, completion
+metadata and a progress log. Warmup and pilot games are excluded from the measured
+results.
 
 ## Build and placement
 
@@ -125,20 +128,19 @@ From the repository root:
 bash scripts/check.sh /path/to/TabletopGames
 ```
 
-Dependencies are Java 21 and Maven. `MVN` selects a Maven executable and
-`MAVEN_REPO` selects a dependency cache. The script compiles local files against a
-separate TAG checkout, so validation needs no source copies into TAG.
+The scripts need Java 21 and Maven. Set `MVN` to choose Maven and `MAVEN_REPO` to
+choose a dependency cache. Validation compiles local agent files against a
+separate TAG checkout, so source files do not need to be copied into TAG.
 
-If using TAG as the IDE project, Java tests belong under `TAG/src/test/java/`
-with the same package subdirectories. The external experiment harness belongs
-under `TAG/src/main/java/coursework/experiments/` only for local experimentation;
-it is not part of the submitted agent. The VM option
-`-Dcoursework.project=/path/to/repository` locates test JSON files. The standalone
-scripts already provide these paths and require no manual relocation.
+When using TAG as the IDE project, put Java tests under `TAG/src/test/java/` with
+their existing package paths. The experiment harness can go under
+`TAG/src/main/java/coursework/experiments/` for local runs; it is excluded from
+the submission. The VM option `-Dcoursework.project=/path/to/repository` locates
+test JSON files. The standalone scripts already supply these paths.
 
-Stage 6 evidence is in `results/stage6/`: `standalone/` records fresh-framework
-checks and decision measurements for `groupAG`; `development-standalone/` retains
-the earlier development-namespace check; `confirmation/` contains the independent
-replication. `results/stage6-validation.txt` and `stage6-python-tests.txt` record
-the current test suites. Exported ZIP and Word report deliverables are kept
-outside the repository; `docs/STAGE_6.md` records remaining submission details.
+In `results/stage6/`, `standalone/` contains the groupAG package checks and
+timings. `development-standalone/` keeps the earlier check using the development
+namespace, while `confirmation/` contains the separate strength study. The test
+logs are `results/stage6-validation.txt` and `stage6-python-tests.txt`. The ZIP
+and Word report are stored outside Git. `docs/STAGE_6.md` lists the remaining
+submission details.

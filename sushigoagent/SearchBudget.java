@@ -3,7 +3,7 @@ package sushigoagent;
 import players.PlayerConstants;
 import java.util.function.LongSupplier;
 
-/** Counts actual simulation operations and checks a monotonic wall-clock deadline. */
+/** Tracks simulation calls and state copies, and checks elapsed search time. */
 final class SearchBudget {
     private final PlayerConstants type;
     private final long limit;

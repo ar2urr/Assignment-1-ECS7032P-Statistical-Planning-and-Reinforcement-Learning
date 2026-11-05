@@ -1,11 +1,11 @@
 # Stage 5: controlled experiments
 
-Stages 4 and 5 are prepared for one combined Git checkpoint. The study protocol was fixed before
-the principal run. The final evidence and machine-readable summaries are in
-[the results directory](../results/stage5/analysis/RESULTS.md). The completed
-run contains 16,128 fixed-iteration games, 28 timing games and 633 timed decisions.
-[Stage 5 findings](STAGE_5_FINDINGS.md) interprets the effects, including the
-Wasabi removal result and the baseline timing overrun.
+Stages 4 and 5 are saved together at `26b8981`. The protocol was fixed before the
+main run, which completed 16,128 games with iteration budgets and 28 timing games
+with 633 measured decisions. [Results and
+figures](../results/stage5/analysis/RESULTS.md) contain the analysis outputs.
+[Stage 5 findings](STAGE_5_FINDINGS.md) discusses the effects, the Wasabi removal
+and the baseline timing overrun.
 
 ## Principal design
 
@@ -18,94 +18,89 @@ The four conditions form a 2 × 2 design:
 | multiplayer | TAG default | MAXN |
 | combined | Sushi Go features | MAXN |
 
-Every main variant plays against homogeneous Random, OSLA and corrected-baseline
-opponent lineups for both three and four players. A game contains one focal agent
-and n−1 opponents of the stated type. There are 504 complete games per cell:
-168 in each three-player seat, or 126 in each four-player seat. The 24 main cells
-therefore contain 12,096 games.
+Each variant faces Random, OSLA and corrected-baseline lineups with three and four
+players. A game has one focal agent and n-1 opponents of the same type. Each cell
+has 504 games: 168 per seat with three players or 126 per seat with four. The 24
+main cells contain 12,096 games.
 
-Four additional conditions remove one feature at a time from the combined agent:
-sets, Wasabi, Maki or Pudding. These play against corrected-baseline opponents
-at both player counts, again with 504 games per cell. The eight feature cells
-contain 4,032 games, making 16,128 fixed-iteration study games in total.
+Four further variants remove sets, Wasabi, Maki or Pudding from the combined
+agent, one feature at a time. They face corrected-baseline opponents at both
+player counts, with 504 games per cell. These eight cells add 4,032 games,
+bringing the total to 16,128.
 
-This operationalises comparisons as multiplayer lineups rather than head-to-head
-duels. The assignment's interpretation of "per pair" still requires teaching-team
-confirmation before final submission.
+Each comparison is a multiplayer lineup. The teaching team still needs to confirm
+whether this satisfies the brief's use of "per pair".
 
 ## Controls and seed policy
 
-Search variants and baseline opponents use 150 iterations, K=sqrt(2), maximum tree
-depth 5, rollout length 10 and epsilon=1e-6. The four feature weights are fixed
-at 1.0 except for the component removed in each feature ablation. No parameter
-tuning or outcome-dependent stopping is part of the study.
+Search variants and baseline opponents use 150 iterations, K=sqrt(2), depth 5,
+rollout length 10 and epsilon=1e-6. Feature weights stay at 1.0 except when a
+removal sets one to zero. The study does not tune parameters or stop early based
+on outcomes.
 
-Random uses TAG's `RandomPlayer`. OSLA uses the unmodified `OSLAPlayer` with its
-default game evaluation and a recorded seeded RNG. Reference agents retain their
-native policies; OSLA's one-step evaluations are not padded to consume 150 searches.
-The corrected baseline is the same reliability-corrected implementation with
-PARANOID and default evaluation, not the historical Stage 1 source with known bugs.
+Random uses TAG's `RandomPlayer`; OSLA uses the unmodified `OSLAPlayer` with
+default evaluation and a recorded seeded RNG. Each keeps its native policy, so
+OSLA is not made to spend 150 iterations. The control uses the corrected baseline
+with PARANOID and default evaluation. It includes the reliability fixes, unlike
+the original Stage 1 source.
 
-Each cell receives a distinct deterministic seed stream derived from master seed
-703205. Every recorded game has a game seed, player seeds and focal seat. Separate
-warmup seeds precede measurement. TAG also uses an unseeded generator for hidden
-state sampling, so identical full-game replay is not guaranteed. The cells are
-analysed as independent samples; common seeds are not claimed to produce paired
-deals or common random numbers.
+Master seed 703205 creates a separate deterministic stream for each cell. Records
+include the game seed, player seeds and focal seat. Warmups use separate seeds.
+TAG also samples hidden states with an unseeded generator, so recorded seeds do
+not guarantee identical games. The analysis treats cells as independent samples
+rather than paired deals.
 
-Partial observability and competition mode are enabled. Event history is disabled.
-Agents receive normal TAG observations; the external harness reads final scores
-only after play. Illegal focal actions and abnormal final results fail the run.
-Fixed-iteration cells run in two JVM processes, each with a 128–512 MiB heap.
-Their latencies are operational diagnostics rather than controlled timing results.
+Partial observability and competition mode are enabled; event history is disabled.
+Players receive normal TAG observations. The harness reads final scores after play
+and fails on an illegal focal action or abnormal result. Two JVM workers run the
+iteration cells, each with a 128-512 MiB heap. Their timings are diagnostic
+because the workers share machine resources.
 
 ## Timing study
 
-After all fixed-iteration workers finish, eight timing cells run sequentially:
-four main variants at each player count, against Random. Each variant plays once
-in every seat, giving 28 complete games. The time configurations set 450 ms and
-`breakMS=25`, leaving a nominal 425 ms search cutoff for the 500 ms target.
+Timing starts after the iteration workers finish. Eight cells run one at a time:
+four variants against Random at each player count. Each variant plays once per
+seat, for 28 games in total. A 450 ms budget with `breakMS=25` gives a nominal 425
+ms search cutoff against the 500 ms target.
 
-Every searched focal decision records wall time, round, hand size, legal-action
-count, completed iterations, forward-model calls and state copies. Quantiles,
-maximum time, throughput and all overruns are retained. Forced singleton actions
-and framework observation construction are outside the measured entry point.
-Each cell has eight separate fixed-iteration warmup games.
+Each searched focal decision records elapsed time, round, hand size, legal-action
+count, iterations, forward-model calls and state copies. The analysis retains
+quantiles, maximum time, throughput and every overrun. Forced single-action turns
+and external observation construction are outside the measured entry point. Each
+cell begins with eight separate iteration-budget warmup games.
 
-This study measures latency through all rounds. Its small game count is not used
-to claim playing strength at 500 ms. Full 500-game time-budget comparisons are
-outside the selected scope. This distinction matters when interpreting the
-rubric's expectation of experiments at the 500 ms level.
+The timing study covers all rounds but has too few games to establish playing
+strength at 500 ms. Full 500-game time-budget comparisons were outside the chosen
+scope. This limit matters when assessing the brief's requirement for experiments
+at the 500 ms level.
 
 ## Data and analysis
 
-The primary outcome is win share: 1 for an outright winner, 1/k for each of k tied
-winners after TAG's Pudding tiebreak, and 0 otherwise. Mean score, ordinal position
-and score gap to the strongest opponent provide secondary context. Baseline
-against baseline is a control for approximately 1/n win share; sampling variation
-and seat effects remain possible.
+The main outcome is win share: 1 for a sole winner, 1/k for each of k tied winners
+after TAG's Pudding tiebreak, and 0 otherwise. Mean score, rank and the gap to the
+strongest opponent give further context. Baseline against baseline should be near
+1/n, allowing for sampling variation and seat effects.
 
-The analyser validates complete cell counts, unique seeds and game indices,
-balanced seats, source snapshot hashes, finite metrics, scores/ranks/tie credit,
-search effort and consistency between per-game and per-decision timing records.
-It refuses incomplete studies and requires an explicit pilot flag below 500 games.
+The analyser checks cell sizes, unique seeds and game indices, balanced seats,
+snapshot hashes, finite metrics, scores, ranks, tie credit and search effort. It
+also checks that game-level timings agree with decision records. Incomplete
+studies are rejected; samples below 500 games need an explicit pilot flag.
 
 Pointwise 95% percentile intervals use 5,000 bootstrap resamples within each seat,
-preserving the seat proportions. Unpaired bootstrap differences estimate the
-heuristic effect under each model, the model effect under each evaluation, the
-combined effect and the factorial interaction. Feature effects compare the full
-combined agent with each removal. These are exploratory intervals without
-multiple-comparison adjustment; shared controls make some contrasts correlated.
-No family-wide significance claim is made. If every sampled outcome is identical,
-the percentile bootstrap interval is degenerate; that is not certainty about the
-underlying population rate.
+keeping the same seat proportions. Independent draws between cells estimate
+heuristic effects, opponent-model effects, the combined effect and the
+interaction. Feature contrasts compare the full combined agent with each removal.
+Intervals are exploratory and unadjusted for multiple comparisons; contrasts
+sharing a control are correlated. They do not establish significance for the whole
+family of comparisons. Identical observed outcomes give a zero-width bootstrap
+interval, which reflects the sample rather than certainty about the population.
 
-The figures are exported as PNG and vector PDF. Exact analysis dependency versions
-are recorded in `experiments/analysis-environment.txt`; the analysis metadata also
-records its Python version and script hash. Raw records, configuration/source
-snapshots, machine/runtime details and hashes remain available for inspection.
-Source snapshots use `.java.txt` to avoid duplicate classes in Java editors;
-their contents are byte-identical to the measured source files.
+Figures are saved as PNG and vector PDF. `experiments/analysis-environment.txt`
+lists the exact dependency versions; analysis metadata records Python and the
+script hash. Raw outcomes, source and configuration snapshots, runtime details and
+hashes are retained. Java snapshots use `.java.txt` to avoid duplicate IDE
+classes. They preserve the bytes used in the recorded runs, even when current
+comments or documentation later change.
 
 ## Reproduction
 
@@ -125,32 +120,30 @@ The study driver used Python 3.9.6; numerical analysis used Python 3.12.14.
 The exact analysis packages can be restored with
 `pip install -r experiments/analysis-environment.txt` in a compatible environment.
 
-`MVN` selects a Maven executable; `MAVEN_REPO` selects a dependency cache. The
-experiment builder freezes TAG bytecode in a per-run JAR before starting games.
-`TAG_JAR` may provide an already-built JAR from the pinned revision; its SHA-256 is
-recorded. The principal run used the previously validated local TAG bundle.
+`MVN` chooses Maven and `MAVEN_REPO` chooses its cache. The builder creates a
+separate framework JAR before starting games. `TAG_JAR` can supply an existing JAR
+from the pinned revision; its SHA-256 is recorded. The main run used the
+previously validated local bundle.
 
-`--resume` requires the same runtime/configuration hashes, framework JAR hash and
-protocol. Completed cells are skipped only when both data and completion metadata
-exist with the expected row count. Partial files are retained for diagnosis and
-cause a resumed cell to stop rather than silently overwrite evidence. A new output
-directory starts an independent run. Pilot commands use `--games 12 --skip-timing`
-and a separate output directory.
+Resuming requires the same source and configuration hashes, framework JAR hash and
+protocol. A cell is skipped only if both its data and completion metadata exist
+with the expected number of rows. Partial files are kept for diagnosis, and
+prevent silent reruns over old evidence. Use a new output directory for a new
+study. Pilots use `--games 12 --skip-timing` and their own output directory.
 
 ## Validation and limits
 
-The combined Java suite passed 43 tests; the analysis has three additional unit
-tests. The successful pilot completed all 32 cells, 384 measured games, and passed
-the full raw-data analyser. Pilot samples do not enter the principal results.
+The Stage 5 suite passed 43 Java tests and three Python analysis tests. Its
+successful pilot completed 384 games across all 32 cells and passed the data
+checks. Pilot games are excluded from the main results.
 
-An earlier pilot was disrupted when a concurrent Maven build temporarily removed
-framework class files. The immutable JAR resolves that runner dependency. Principal
-data collection started only after the revised pilot completed successfully.
+An earlier pilot failed when a concurrent Maven build temporarily removed
+framework classes. Giving each run its own JAR removed that dependency on the
+build directory. Main data collection began only after the revised pilot passed.
 
-The pinned public TAG revision may differ from the marking environment. Fixed
-iteration counts do not equalise computation: MAXN evaluates multiple player
-values and the heuristic has its own cost. The homogeneous opponents, fixed search
-settings, approximate evaluation and remaining hidden-information limitations
-restrict generalisation. Selecting a final configuration from these data needs a
-held-out confirmation before a final strength claim. Stage 6 covers final course
-compatibility, report preparation and submission packaging.
+The pinned TAG version may differ from the marking version. Equal iteration counts
+do not mean equal cost: MAXN evaluates more players, and the heuristic adds work
+at each leaf. Fixed lineups and settings, approximate evaluation and hidden-state
+assumptions limit the conclusions. Stage 6 tests the selected configuration on new
+games and prepares the export; compatibility with the marking version still needs
+confirmation.

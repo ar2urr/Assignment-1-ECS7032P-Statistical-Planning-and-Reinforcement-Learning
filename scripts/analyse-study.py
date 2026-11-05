@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate raw study records, estimate uncertainty, and export report figures."""
+"""Check the game records and produce confidence intervals, tables and figures."""
 import argparse
 import csv
 import hashlib
@@ -29,7 +29,7 @@ def write_csv(path, rows):
         writer.writerows(rows)
 
 def stratified_bootstrap(values, seats, rng, repetitions=5000):
-    """Resample games within each seat, maintaining the study's seat proportions."""
+    """Resample games within each seat without changing the proportion from each seat."""
     values, seats = np.asarray(values, dtype=float), np.asarray(seats, dtype=int)
     result = np.zeros(repetitions)
     for seat in sorted(set(seats)):
@@ -192,20 +192,23 @@ def main():
     report = ['# Stage 5 results', '',
               f'Validated {len(summaries) * games:,} fixed-iteration games across {len(summaries)} cells '
               f'({games} games per cell). Each cell has equal numbers in every seat.', '',
-              'A matchup contains one focal agent and identical opponent types in all remaining seats. '
-              'These are multiplayer lineup comparisons, not two-player duels. Win share assigns '
-              '1 to an outright winner, 1/k to each of k tied winners after TAG’s Pudding tiebreak, and 0 otherwise.', '',
-              'Intervals are pointwise 95% percentile bootstrap intervals from 5,000 resamples of games '
-              'within each seat. Cells use independent seed streams; contrasts use independent bootstrap '
-              'draws. The intervals are exploratory and are not adjusted for multiple comparisons. '
-              'Shared controls also make contrasts correlated. No formal family-wide significance claim is made. '
-              'An all-identical outcome sample produces a degenerate bootstrap interval; this reflects '
-              'no observed variation and does not establish certainty about the population rate.', '',
+              'Each game has one focal agent and opponents of the same type in the other '
+              'seats. These comparisons use multiplayer lineups. Win share is 1 for a sole '
+              "winner, 1/k for each of k tied winners after TAG's Pudding tiebreak, and 0 "
+              'otherwise.', '',
+              'Pointwise 95% percentile intervals use 5,000 bootstrap resamples within each '
+              'seat. Cells have independent seed streams, and contrasts use independent '
+              'bootstrap draws. The intervals are exploratory and unadjusted for multiple '
+              'comparisons. Shared controls make some contrasts correlated, so the analysis '
+              'makes no significance claim for the whole family of tests. If all sampled '
+              'outcomes are identical, the interval has zero width; the population rate can '
+              'still be uncertain.', '',
               '## Main comparisons', '',
               '![Win share by variant, opponent and player count](main-comparisons.png)', '',
-              '[Vector PDF](main-comparisons.pdf). Base = corrected baseline; Heuristic = custom evaluation; '
-              'MaxN = multiplayer selection; Both = combined. The dashed 1/n line is an equal-player '
-              'reference, not the expected win rate against weaker or stronger opponents.', '',
+              '[Vector PDF](main-comparisons.pdf). Base is the corrected baseline, '
+              'Heuristic adds the custom evaluation, MaxN changes opponent selection, and '
+              'Both combines the changes. The dashed 1/n line shows the reference for equal '
+              'players. Expected win share differs against stronger or weaker opponents.', '',
               '| Players | Opponents | Variant | Win share (95% CI) | Mean score |',
               '|---:|---|---|---:|---:|']
     if games < 500:
@@ -220,12 +223,12 @@ def main():
         if row['contrast'] == 'combined_vs_baseline':
             report.append(f"| {row['players']} | {row['opponent']} | {100*row['difference']:+.2f} pp | "
                           f"{100*row['low95']:+.2f} to {100*row['high95']:+.2f} pp |")
-    report += ['', 'All conditional effects and the factorial interaction are retained in '
-               '[contrasts.csv](contrasts.csv).', '', '## Feature removals', '',
-               'Positive full-minus-removed differences favour keeping the feature; intervals crossing '
-               'zero leave its direction uncertain. Each condition uses 504 games against baseline '
-               'opponents in the principal study. Removals are conditional on MAXN and all other '
-               'feature weights staying at 1.0; they do not measure every feature interaction.', '',
+    report += ['', '[contrasts.csv](contrasts.csv) contains every conditional effect and the '
+                   'factorial interaction.', '', '## Feature removals', '',
+               'A positive full-minus-removed difference favours keeping the feature. An '
+               'interval crossing zero leaves the direction unresolved. Each main-study '
+               'condition has 504 games against baseline opponents. All removals keep MAXN '
+               'and the other weights at 1.0, so other feature interactions remain untested.', '',
                '![Win-share effects of individual heuristic features](feature-ablations.png)', '',
                '[Vector PDF](feature-ablations.pdf) · [Exact estimates](feature-effects.csv)', '',
                '| Players | Feature | Full minus removed | Pointwise 95% CI |', '|---:|---|---:|---:|']
@@ -246,22 +249,25 @@ def main():
                           f"{row['p95_ms']:.2f} | {row['max_ms']:.2f} | {row['over_500ms']} |")
         report += ['', '![Distribution of searched-decision latencies](decision-timing.png)', '',
                    '[Vector PDF](decision-timing.pdf) · [Exact timing summaries](timing-summary.csv)', '',
-                   'These timings cover searched decisions across all three rounds, including Chopsticks '
-                   'when encountered. They exclude framework observation construction, action-list generation '
-                   'outside the agent, logging and forced single-action turns. The 450 ms configuration uses '
-                   'a 25 ms reserve. Both warmup and measurement use a 128–512 MiB JVM heap. '
-                   'The small timing sample is not a 500 ms playing-strength comparison or a universal deadline guarantee.']
+                   'The measurements cover searched decisions in all three rounds and Chopsticks '
+                   'when encountered. They exclude external observation and action-list '
+                   'generation, logging and forced single-action turns. The configuration uses '
+                   '450 ms with a 25 ms reserve; warmups and measured games use a 128-512 MiB '
+                   'JVM heap. This small sample describes observed latency. It cannot establish '
+                   'playing strength at 500 ms or guarantee that every decision meets the '
+                   'deadline.']
     else:
         report.append('Timing was skipped for this pilot.')
     report += ['', '## Replication and limits', '',
-               'The manifest records the TAG revision, source/configuration hashes, machine/runtime details '
-               'and seed policy. Source and configuration snapshots accompany the raw data. Fixed iterations '
-               'control the number of searches rather than equalising elapsed time; MaxN evaluates more '
-               'player values per leaf. TAG’s hidden-state sampling is not entirely seed-controlled, so '
-               'recorded seeds do not ensure identical reruns. The fixed opponents and sampled budgets limit '
-               'generalisation. These results do not rank all possible agents or demonstrate theoretical optimality.', '',
-               'The feature weights were fixed before this study. Choosing a deployment configuration from '
-               'these results requires a separate held-out confirmation before a final strength claim.', '']
+               'The manifest records the TAG revision, source and configuration hashes, '
+               'machine, runtime and seed policy. Snapshots preserve the sources and '
+               'settings used with the raw data. Equal iteration counts do not equalise '
+               'elapsed time: MaxN evaluates more players per leaf. Recorded seeds also '
+               'cannot reproduce every hidden-state sample in TAG. The results apply to the '
+               'tested opponents and budgets; they do not rank all agents or establish '
+               'optimality.', '',
+               'Weights were fixed before the study. A configuration chosen from these '
+               'results should be checked on new games before making a final strength claim.', '']
     (out / 'RESULTS.md').write_text('\n'.join(report))
     metadata = {'bootstrap_repetitions': 5000, 'bootstrap_seed': 703205,
                 'intervals': 'pointwise 95% seat-stratified percentile bootstrap; no multiple-comparison adjustment',

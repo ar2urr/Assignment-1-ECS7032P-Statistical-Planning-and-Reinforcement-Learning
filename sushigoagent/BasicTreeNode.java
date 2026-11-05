@@ -9,10 +9,10 @@ import static java.util.stream.Collectors.toList;
 import static utilities.Utils.noise;
 
 /**
- * Adapted from TAG players.basicMCTS.BasicTreeNode (see LICENSE-TAG.txt).
- * Retains closed-loop selection, random expansion/rollout and most-visited action selection.
- * Stage 2 adds resource checks and seeded sampling; Stage 4 adds selectable
- * per-player value backup and self-interested opponent selection.
+ * Based on TAG players.basicMCTS.BasicTreeNode; see LICENSE-TAG.txt.
+ * The tree uses sampled states, random expansion and rollouts, and visit counts
+ * to choose the root action. Stage 2 added budget checks and seeded sampling.
+ * Stage 4 added value vectors and a choice of opponent model.
  */
 class BasicTreeNode {
     final BasicTreeNode root;
@@ -38,7 +38,7 @@ class BasicTreeNode {
         this.rnd = rnd;
         this.budget = budget;
         if (state.isNotTerminal()) {
-            // The root uses the caller's legal list, including any action restrictions.
+            // Use the supplied root actions so caller restrictions still apply.
             List<AbstractAction> legal = actions != null ? actions
                     : player.getForwardModel().computeAvailableActions(state, player.getParameters().actionSpace);
             for (AbstractAction action : legal) children.put(action, null);
@@ -57,7 +57,7 @@ class BasicTreeNode {
             boolean maxN = player.getParameters().opponentModel == BasicMCTSParams.OpponentModel.MAXN;
             for (int p = 0; p < values.length; p++) {
                 if (!maxN && p != player.getPlayerID()) continue;
-                // Never back up an incomplete vector when the deadline expires.
+                // Discard a partial evaluation if time runs out before all values are ready.
                 if (!budget.hasTime()) return;
                 values[p] = player.getParameters().getStateHeuristic().evaluateState(endState, p);
                 if (!Double.isFinite(values[p]))
@@ -65,7 +65,7 @@ class BasicTreeNode {
             }
             selected.backUp(values);
             budget.completeIteration(System.nanoTime() - started);
-            // A fully terminal/depth-limited tree needs no further identical evaluations.
+            // Stop if every branch has ended or reached the depth limit.
             if (budget.copyCalls + budget.fmCalls == operationsBefore
                     && player.getParameters().budgetType != players.PlayerConstants.BUDGET_ITERATIONS
                     && player.getParameters().budgetType != players.PlayerConstants.BUDGET_TIME) break;
@@ -101,7 +101,7 @@ class BasicTreeNode {
     private AbstractGameState copyState(AbstractGameState original) {
         if (!budget.reserveCopy()) return null;
         AbstractGameState copy = original.copy();
-        // Seed chance events on the independent simulation copy; never reseed the observation.
+        // Seed chance events on the simulation copy, leaving the observation untouched.
         copy.getRnd().setSeed(rnd.nextLong());
         return copy;
     }
@@ -124,8 +124,8 @@ class BasicTreeNode {
             int perspective = maxN ? actor : player.getPlayerID();
             double childValue = child.totalValues[perspective] / (child.nVisits + params.epsilon);
             double exploration = params.K * Math.sqrt(Math.log(nVisits + 1) / (child.nVisits + params.epsilon));
-            // MaxN selects the mover's own value, including repeated turns (Chopsticks).
-            // PARANOID retains Stage 2's root-value minimisation at every opponent node.
+            // MAXN uses the current mover's value, even on consecutive Chopsticks turns.
+            // PARANOID makes every opponent minimise the root player's value.
             double sign = maxN || actor == player.getPlayerID() ? 1.0 : -1.0;
             double uctValue = sign * childValue + exploration;
             uctValue = noise(uctValue, params.epsilon, rnd.nextDouble());

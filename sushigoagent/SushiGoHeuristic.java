@@ -11,9 +11,9 @@ import games.sushigo.cards.SGCard.SGCardType;
 import java.util.EnumMap;
 
 /**
- * Leaf evaluation based on awarded points and discounted public scoring prospects.
- * Set and Wasabi estimates use a coarse independent-draw model, not calibrated
- * draft probabilities. See docs/STAGE_3.md for assumptions and ablations.
+ * Adds estimates of future scoring to points already awarded at a search leaf.
+ * Sets and Wasabi use a rough model of independent draws. It does not capture
+ * actual drafting choices; docs/STAGE_3.md explains the assumptions and tests.
  */
 public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implements IStateHeuristic {
     private double setWeight = 1.0;
@@ -50,7 +50,7 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
             throw new IllegalArgumentException("SushiGoHeuristic requires a Sushi Go state");
         if (playerId < 0 || playerId >= state.getNPlayers())
             throw new IllegalArgumentException("Invalid player index: " + playerId);
-        // End-of-round/game awards are already included before TAG declares a result.
+        // TAG has already awarded round and game bonuses when it declares the result.
         if (!state.isNotTerminal()) return state.getPlayerResults()[playerId].value;
 
         SGParameters params = (SGParameters) state.getGameParameters();
@@ -66,7 +66,7 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
                 + setPotential(state, playerId, SGCardType.Sashimi, 3,
                 params.valueSashimiTriple, horizon, remaining, pool);
         double wasabi = wasabiPotential(state, playerId, params, horizon, remaining, pool);
-        // Nigiri, Dumplings and completed sets have already contributed to gameScore.
+        // gameScore already includes Nigiri, Dumplings and completed sets.
         return (state.getGameScore(playerId) + setWeight * sets + wasabiWeight * wasabi
                 + makiWeight * roundProgress * projectedMaki(state, playerId)
                 + puddingWeight * gameProgress * projectedPudding(state, playerId)) / 50.0;
@@ -80,8 +80,8 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
         EnumMap<SGCardType, Integer> remaining = new EnumMap<>(SGCardType.class);
         for (SGCardType type : SGCardType.values()) remaining.put(type, 0);
         params.nCardsPerType.forEach((key, count) -> remaining.merge(key.a, count, Integer::sum));
-        // Count physical cards here; a three-icon Maki card removes one card, not three.
-        // Discards from earlier rounds and hidden hands are deliberately not inspected.
+        // Subtract cards from the pool: a three-icon Maki still uses just one card.
+        // This estimate leaves out earlier discards and the contents of hidden hands.
         for (var tableau : state.getPlayedCards()) {
             for (SGCard card : tableau.getComponents()) {
                 remaining.compute(card.type, (type, count) -> Math.max(0, count - 1));
@@ -97,7 +97,7 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
         int needed = size - progress;
         if (progress == 0 || horizon < needed || remaining.get(type) < needed || pool == 0) return 0;
         double chance = binomialTail(horizon, (double) remaining.get(type) / pool, needed);
-        // Credit only the fraction represented by cards already committed to this set.
+        // Give credit for the part of the set already collected.
         return award * ((double) progress / size) * chance;
     }
 
@@ -114,11 +114,11 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
                 + egg * params.valueEggNigiri) / nigiri;
         double expectedFilled = 0;
         for (int i = 1; i <= slots; i++) expectedFilled += binomialTail(horizon, (double) nigiri / pool, i);
-        // Only the multiplier's extra points are credited; the base Nigiri score is excluded.
+        // Add only the Wasabi bonus above the Nigiri's base score.
         return (params.multiplierWasabi - 1) * average * expectedFilled;
     }
 
-    /** Independent-draw approximation P(X >= needed); final bucket is absorbing. */
+    /** Estimates P(X >= needed) for independent draws; the last bucket keeps all successes above the threshold. */
     private static double binomialTail(int trials, double probability, int needed) {
         if (trials < needed) return 0;
         double[] mass = new double[needed + 1];
@@ -132,7 +132,7 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
         return clamp(mass[needed]);
     }
 
-    /** Current Maki award if the round ended now, matching TAG's integer tie splits. */
+    /** Maki points if the round ended now, using TAG's integer splits for ties. */
     static int projectedMaki(SGGameState state, int playerId) {
         SGParameters params = (SGParameters) state.getGameParameters();
         int most = 0, second = 0, firstTies = 0, secondTies = 0;
@@ -152,7 +152,7 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
         return 0;
     }
 
-    /** Current Pudding award if the game ended now; two-player games have no penalty. */
+    /** Pudding points if the game ended now, with no last-place penalty for two players. */
     static int projectedPudding(SGGameState state, int playerId) {
         SGParameters params = (SGParameters) state.getGameParameters();
         int most = Integer.MIN_VALUE, least = Integer.MAX_VALUE, firstTies = 0, lastTies = 0;
@@ -173,7 +173,7 @@ public class SushiGoHeuristic extends TunableParameters<SushiGoHeuristic> implem
         return 0;
     }
 
-    // Keep TAG's score/50 scale for the ablation; it is not bounded to [-1, 1].
+    // Keep the baseline's score/50 scale; nonterminal values can exceed [-1, 1].
     @Override public double minValue() { return Double.NEGATIVE_INFINITY; }
     @Override public double maxValue() { return Double.POSITIVE_INFINITY; }
     @Override public SushiGoHeuristic instantiate() { return (SushiGoHeuristic) copy(); }

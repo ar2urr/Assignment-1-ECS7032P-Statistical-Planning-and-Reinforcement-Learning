@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile an exported package in a fresh TAG source tree and exercise its real entry points."""
+"""Compile the exported package in a fresh TAG tree and test its constructors and JSON loader."""
 import argparse
 import hashlib
 import importlib.util
